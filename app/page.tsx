@@ -1,6 +1,6 @@
 import { Provider } from 'react-redux';
 import { store } from '../components/store/store';
-import useAxiosInterceptors from '../components/common/useAxiosInterceptors';
+import useAxiosInterceptors from '../components/hook/common/useAxiosInterceptors';
 
 const Home = () => {
     useAxiosInterceptors();
