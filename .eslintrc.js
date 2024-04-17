@@ -1,6 +1,6 @@
 module.exports = {
     root: true,
-    extends: 'next/core-web-vitals',
+    extends: ['next/core-web-vitals', 'eslint-config-prettier'],
     rules: {
         'prettier/prettier': [
             'error',
