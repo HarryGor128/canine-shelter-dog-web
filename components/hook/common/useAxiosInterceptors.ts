@@ -1,4 +1,3 @@
-'use client';
 import axios, { AxiosError } from 'axios';
 
 import ApiSetting from '../../constant/ApiSetting';

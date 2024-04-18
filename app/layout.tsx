@@ -4,6 +4,8 @@ import { far } from '@fortawesome/free-regular-svg-icons';
 import { fas } from '@fortawesome/free-solid-svg-icons';
 import type { Metadata } from 'next';
 import { Inter } from 'next/font/google';
+import AppProvider from '../components/provider/AppProvider';
+import InitializeHook from './InitializeHook';
 
 library.add(fab, far, fas);
 
@@ -21,7 +23,11 @@ export default function RootLayout({
 }>) {
     return (
         <html lang='en'>
-            <body className={inter.className}>{children}</body>
+            <body className={inter.className}>
+                <AppProvider>
+                    <InitializeHook>{children}</InitializeHook>
+                </AppProvider>
+            </body>
         </html>
     );
 }
