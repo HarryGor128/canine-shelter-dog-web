@@ -1,5 +1,11 @@
+import AppHeader from '../../components/components/common/AppHeader/AppHeader';
+
 const HomePage = () => {
-    return <div style={{ flex: 1 }}>Home</div>;
+    return (
+        <>
+            <AppHeader title={'Home'} />
+        </>
+    );
 };
 
 export default HomePage;
