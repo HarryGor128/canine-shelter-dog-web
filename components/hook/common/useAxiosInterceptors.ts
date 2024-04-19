@@ -9,7 +9,8 @@ const useAxiosInterceptors = () => {
 
     axios.create(ApiSetting.axiosSetting);
 
-    // axios.defaults.baseURL = 'http://192.168.1.6:3003/';
+    axios.defaults.baseURL = ApiSetting.axiosSetting.baseURL;
+    axios.defaults.responseType = 'json';
 
     axios.interceptors.response.use(
         (response) => {

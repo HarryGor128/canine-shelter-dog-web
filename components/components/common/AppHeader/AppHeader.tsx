@@ -62,7 +62,7 @@ const AppHeader = ({ title }: AppHeaderProps) => {
                         >
                             {title}
                         </Typography>
-                        {`Hi, ${userInfo.toString()}`}
+                        {`Hi, ${isLogin ? userInfo.user.email : 'Anonymous'}`}
                         <Button
                             color='inherit'
                             onClick={() => {
