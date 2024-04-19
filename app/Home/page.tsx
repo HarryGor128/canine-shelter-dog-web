@@ -1,12 +1,17 @@
 'use client';
 
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import AppHeader from '../../components/components/common/AppHeader/AppHeader';
 import dogServices from '../../components/services/dogServices';
+import Dog from '../../components/type/Dog';
+import DogList from '../../components/components/DogList/DogList';
 
 const Home = () => {
+    const [dogList, setDogList] = useState<Dog[]>([]);
+
     const getDogList = async () => {
-        await dogServices.getAllDogsInfo();
+        const result = await dogServices.getAllDogsInfo();
+        setDogList(result);
     };
 
     useEffect(() => {
@@ -16,6 +21,7 @@ const Home = () => {
     return (
         <>
             <AppHeader title={'Home'} />
+            <DogList dogList={dogList} />
         </>
     );
 };
