@@ -29,7 +29,7 @@ const AppTable = ({ data, displayField, onPressItem }: AppTableProps) => {
                 <TableHead>
                     <TableRow>
                         {displayField.map((item) => (
-                            <TableCell>{item.header}</TableCell>
+                            <TableCell key={item.key}>{item.header}</TableCell>
                         ))}
                     </TableRow>
                 </TableHead>
@@ -52,7 +52,10 @@ const AppTable = ({ data, displayField, onPressItem }: AppTableProps) => {
                             {displayField.map((cell) => (
                                 <>
                                     {cell.isPhoto ? (
-                                        <TableCell {...cell.bodyCellStyle}>
+                                        <TableCell
+                                            key={cell.key}
+                                            {...cell.bodyCellStyle}
+                                        >
                                             <img
                                                 src={row[cell.key]}
                                                 style={{
@@ -62,7 +65,9 @@ const AppTable = ({ data, displayField, onPressItem }: AppTableProps) => {
                                             />
                                         </TableCell>
                                     ) : (
-                                        <TableCell>{row[cell.key]}</TableCell>
+                                        <TableCell key={cell.key}>
+                                            {row[cell.key]}
+                                        </TableCell>
                                     )}
                                 </>
                             ))}

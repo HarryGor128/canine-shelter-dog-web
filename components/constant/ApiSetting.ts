@@ -1,7 +1,8 @@
 import { AxiosRequestConfig } from 'axios';
 
 // const apiURL = 'https://canine-shelter-dog-api.zeabur.app/'; // zeabur
-const apiURL = 'http://192.168.1.6:8000/'; // Local Lan IP
+// const apiURL = 'http://192.168.1.6:8000/'; // Local Lan IP
+const apiURL = 'http://localhost:8000/'; // localhost
 
 const axiosSetting: AxiosRequestConfig = {
     baseURL: apiURL,
