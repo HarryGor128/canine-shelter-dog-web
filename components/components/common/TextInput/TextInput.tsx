@@ -7,6 +7,7 @@ interface TextInputProps {
     isRequired?: boolean;
     placeHolder?: string;
     style?: CSSProperties;
+    error?: boolean;
     muiTextFieldProps?: TextFieldProps;
 }
 
@@ -16,6 +17,7 @@ const TextInput = ({
     isRequired,
     placeHolder,
     style,
+    error,
     muiTextFieldProps,
 }: TextInputProps) => {
     const input = (
@@ -31,6 +33,7 @@ const TextInput = ({
             onChange={input}
             placeholder={placeHolder}
             style={style}
+            error={error}
             {...muiTextFieldProps}
         />
     );

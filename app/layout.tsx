@@ -6,6 +6,7 @@ import '@fontsource/roboto/300.css';
 import '@fontsource/roboto/400.css';
 import '@fontsource/roboto/500.css';
 import '@fontsource/roboto/700.css';
+import AppSnackBar from '../components/components/common/AppSnackBar/AppSnackBar';
 
 const inter = Inter({ subsets: ['latin'] });
 
@@ -23,7 +24,9 @@ export default function RootLayout({
         <html lang='en'>
             <body className={inter.className}>
                 <AppProvider>
-                    <HookProvider>{children}</HookProvider>
+                    <HookProvider>
+                        <AppSnackBar>{children}</AppSnackBar>
+                    </HookProvider>
                 </AppProvider>
             </body>
         </html>
