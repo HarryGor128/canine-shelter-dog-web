@@ -22,7 +22,7 @@ export default function RootLayout({
 }>) {
     return (
         <html lang='en'>
-            <body className={inter.className}>
+            <body className={inter.className} style={{ margin: 0 }}>
                 <AppProvider>
                     <HookProvider>
                         <AppSnackBar>{children}</AppSnackBar>

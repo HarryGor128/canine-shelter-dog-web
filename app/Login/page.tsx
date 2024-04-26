@@ -50,17 +50,13 @@ const Login = () => {
 
     return (
         <Box
-            component='form'
-            autoComplete='off'
-            noValidate
-            height={height * 0.95}
-            width={width * 0.95}
             display={'flex'}
-            flexDirection={'column'}
             justifyContent={'center'}
             alignItems={'center'}
+            minHeight={'100vh'}
         >
             <Stack direction={'column'} spacing={2}>
+                <div style={{ alignSelf: 'center' }}>Login</div>
                 <TextInput
                     label={'Email'}
                     placeHolder={'Email'}
