@@ -11,8 +11,8 @@ import AppSnackBar from '../components/components/common/AppSnackBar/AppSnackBar
 const inter = Inter({ subsets: ['latin'] });
 
 export const metadata: Metadata = {
-    title: 'Hello word!',
-    description: 'Hello word',
+    title: 'The Canine Shelter',
+    description: 'The Canine Shelter',
 };
 
 export default function RootLayout({
