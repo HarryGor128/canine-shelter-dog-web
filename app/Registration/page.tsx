@@ -8,13 +8,18 @@ import { Send } from '@mui/icons-material';
 import AppSnackBarContext from '../../components/components/common/AppSnackBar/context/AppSnackBarContext';
 import { useRouter } from 'next/navigation';
 import authServices from '../../components/services/authServices';
+import { setIsStaff } from '../../components/store/reducer/userSlice';
+import { useAppDispatch } from '../../components/store/storeHooks';
 
 const Registration = () => {
     const [regInfo, setRegInfo] = useState<RegistrationInfo>(
         new RegistrationInfo(),
     );
     const [isSubmitting, setIsSubmitting] = useState<boolean>(false);
+
     const router = useRouter();
+
+    const dispatch = useAppDispatch();
 
     const { setIsOpen, setMsg, setType } = useContext(AppSnackBarContext);
 
@@ -30,6 +35,13 @@ const Registration = () => {
         if (regInfo.email && regInfo.password) {
             const result = await authServices.registration(regInfo);
             if (result.result) {
+                setMsg('Registration Success');
+                setType('success');
+                setIsOpen(true);
+
+                const getRole = await authServices.roleQuery(regInfo.email);
+                dispatch(setIsStaff(getRole));
+
                 router.back();
             } else {
                 setMsg(result.msg);
@@ -72,6 +84,7 @@ const Registration = () => {
                         onInput(text, 'password');
                     }}
                     isRequired
+                    isSecret
                     error={isSubmitting && !regInfo.password}
                 />
                 <TextInput

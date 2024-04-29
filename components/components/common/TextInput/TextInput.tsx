@@ -8,6 +8,7 @@ interface TextInputProps {
     placeHolder?: string;
     style?: CSSProperties;
     error?: boolean;
+    isSecret?: boolean;
     muiTextFieldProps?: TextFieldProps;
 }
 
@@ -18,6 +19,7 @@ const TextInput = ({
     placeHolder,
     style,
     error,
+    isSecret,
     muiTextFieldProps,
 }: TextInputProps) => {
     const input = (
@@ -34,6 +36,7 @@ const TextInput = ({
             placeholder={placeHolder}
             style={style}
             error={error}
+            type={isSecret ? 'password' : undefined}
             {...muiTextFieldProps}
         />
     );

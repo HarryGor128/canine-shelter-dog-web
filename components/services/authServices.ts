@@ -66,6 +66,26 @@ const authServices = {
             return Promise.resolve({ result: false, msg: error as string });
         }
     },
+
+    async roleQuery(email: string): Promise<boolean> {
+        try {
+            const result = await axios.get(ApiEndpoint.auth.roleQuery, {
+                params: { email },
+            });
+            console.log(
+                '🚀 ~ file: authServices.ts:75 ~ roleQuery ~ result:',
+                result,
+            );
+
+            return Promise.resolve(result.data.email !== undefined);
+        } catch (error) {
+            console.log(
+                '🚀 ~ file: authServices.ts:78 ~ roleQuery ~ error:',
+                error,
+            );
+            return Promise.resolve(false);
+        }
+    },
 };
 
 export default authServices;

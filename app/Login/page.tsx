@@ -3,21 +3,23 @@ import { useContext, useState } from 'react';
 import LoginInfo from '../../components/type/LoginInfo';
 import { Box, Stack } from '@mui/material';
 import TextInput from '../../components/components/common/TextInput/TextInput';
-import useWindowSize from '../../components/hook/common/useWindowSize';
 import Button from '../../components/components/common/Button/Button';
 import { Send } from '@mui/icons-material';
 import authServices from '../../components/services/authServices';
 import AppSnackBarContext from '../../components/components/common/AppSnackBar/context/AppSnackBarContext';
 import { useRouter } from 'next/navigation';
+import { useAppDispatch } from '../../components/store/storeHooks';
+import { setIsStaff } from '../../components/store/reducer/userSlice';
 
 const Login = () => {
     const [loginInfo, setLoginInfo] = useState<LoginInfo>(new LoginInfo());
     const [isSubmitting, setIsSubmitting] = useState<boolean>(false);
+
     const router = useRouter();
 
-    const { setIsOpen, setMsg, setType } = useContext(AppSnackBarContext);
+    const dispatch = useAppDispatch();
 
-    const { width, height } = useWindowSize();
+    const { setIsOpen, setMsg, setType } = useContext(AppSnackBarContext);
 
     const onInput = (text: string, key: keyof LoginInfo) => {
         setLoginInfo((prev) => {
@@ -31,6 +33,13 @@ const Login = () => {
         if (loginInfo.email && loginInfo.password) {
             const result = await authServices.login(loginInfo);
             if (result.result) {
+                setMsg('Login Success');
+                setType('success');
+                setIsOpen(true);
+
+                const getRole = await authServices.roleQuery(loginInfo.email);
+                dispatch(setIsStaff(getRole));
+
                 router.back();
             } else {
                 setMsg(result.msg);
@@ -73,6 +82,7 @@ const Login = () => {
                         onInput(text, 'password');
                     }}
                     isRequired
+                    isSecret
                     error={isSubmitting && !loginInfo.password}
                 />
                 <Button

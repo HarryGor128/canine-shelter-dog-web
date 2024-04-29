@@ -9,6 +9,7 @@ const ApiEndpoint = {
     auth: {
         Login: 'auth/login',
         registration: 'auth/registration',
+        roleQuery: 'auth/roleQuery',
     },
 };
 
