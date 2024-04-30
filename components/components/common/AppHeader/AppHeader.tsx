@@ -5,17 +5,28 @@ import {
     Button,
     Drawer,
     IconButton,
+    List,
+    ListItem,
+    ListItemButton,
+    ListItemIcon,
+    ListItemText,
     Toolbar,
     Typography,
 } from '@mui/material';
 import MenuIcon from '@mui/icons-material/Menu';
 import { useAppSelector } from '../../../store/storeHooks';
-import { useState } from 'react';
+import { ReactNode, useState } from 'react';
 import { useRouter } from 'next/navigation';
-import AppDrawer from './components/AppDrawer/AppDrawer';
+import { Add } from '@mui/icons-material';
 
 interface AppHeaderProps {
     title: string;
+}
+
+interface Navigator {
+    label: string;
+    icon: ReactNode;
+    goToPage: Function;
 }
 
 const AppHeader = ({ title }: AppHeaderProps) => {
@@ -25,6 +36,14 @@ const AppHeader = ({ title }: AppHeaderProps) => {
     const { isLogin } = useAppSelector((state) => state.appState);
 
     const [openDrawer, setOpenDrawer] = useState<boolean>(false);
+
+    const navigator: Navigator[] = [
+        {
+            label: 'Add',
+            icon: <Add />,
+            goToPage: () => {},
+        },
+    ];
 
     const onClickMenu = () => {
         setOpenDrawer(true);
@@ -75,7 +94,27 @@ const AppHeader = ({ title }: AppHeaderProps) => {
                 </AppBar>
             </Box>
             <Drawer open={openDrawer} onClose={onCloseDrawer}>
-                <AppDrawer />
+                <Box
+                    sx={{ width: 250 }}
+                    role='presentation'
+                    onClick={onCloseDrawer}
+                >
+                    <List>
+                        {navigator.map((nav, index) => (
+                            <ListItem key={index} disablePadding>
+                                <ListItemButton
+                                    onClick={() => {
+                                        nav.goToPage();
+                                        onCloseDrawer();
+                                    }}
+                                >
+                                    <ListItemIcon>{nav.icon}</ListItemIcon>
+                                    <ListItemText primary={nav.label} />
+                                </ListItemButton>
+                            </ListItem>
+                        ))}
+                    </List>
+                </Box>
             </Drawer>
         </>
     );

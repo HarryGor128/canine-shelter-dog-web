@@ -36,8 +36,9 @@ const RadioButton = ({
                 row={row}
                 onChange={(_, value) => onChangeValue(value)}
             >
-                {option.map((item) => (
+                {option.map((item, index) => (
                     <FormControlLabel
+                        key={index}
                         disabled={disabled}
                         control={<Radio />}
                         {...item}

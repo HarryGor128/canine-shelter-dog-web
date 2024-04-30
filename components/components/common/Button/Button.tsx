@@ -5,7 +5,7 @@ import {
 } from '@mui/material';
 import { CSSProperties, ReactNode } from 'react';
 
-interface ButtonProps {
+export interface ButtonProps {
     onPress: Function;
     text: string;
     startIcon?: ReactNode;
