@@ -9,6 +9,8 @@ import { CSSProperties, useState } from 'react';
 import TextInput from '../common/TextInput/TextInput';
 import DatePicker from '../common/DatePicker/DatePicker';
 import SexRadioButton from '../SexRadioButton/SexRadioButton';
+import Button from '../common/Button/Button';
+import { Close } from '@mui/icons-material';
 
 interface DogListProps {
     dogList: Dog[];
@@ -81,6 +83,9 @@ const DogList = ({ dogList }: DogListProps) => {
                         <Stack
                             direction={{ xs: 'column', sm: 'row' }}
                             spacing={{ xs: 2, sm: 4 }}
+                            useFlexGap
+                            flexWrap={'wrap'}
+                            justifyContent={'center'}
                             margin={'30px 0px 0px 0px'}
                         >
                             <TextInput
@@ -126,6 +131,20 @@ const DogList = ({ dogList }: DogListProps) => {
                                 isRequired
                                 error={isSubmitting && !selectItem.description}
                                 disabled={!isStaff}
+                            />
+                        </Stack>
+                        <Stack
+                            direction={{ xs: 'column', sm: 'row' }}
+                            spacing={{ xs: 2, sm: 4 }}
+                            useFlexGap
+                            flexWrap={'wrap'}
+                            justifyContent={'center'}
+                            margin={'30px 0px 0px 0px'}
+                        >
+                            <Button
+                                onPress={onCloseItem}
+                                text={'Close'}
+                                startIcon={<Close />}
                             />
                         </Stack>
                     </div>
