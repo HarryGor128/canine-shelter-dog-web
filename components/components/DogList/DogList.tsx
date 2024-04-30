@@ -1,5 +1,4 @@
 'use client';
-
 import { GridColDef, GridRowParams } from '@mui/x-data-grid';
 import Dog from '../../type/Dog';
 import AppTable from '../common/AppTable/AppTable';
@@ -9,6 +8,7 @@ import { Box, Modal, Stack, SxProps, Theme } from '@mui/material';
 import { CSSProperties, useState } from 'react';
 import TextInput from '../common/TextInput/TextInput';
 import DatePicker from '../common/DatePicker/DatePicker';
+import SexRadioButton from '../SexRadioButton/SexRadioButton';
 
 interface DogListProps {
     dogList: Dog[];
@@ -80,7 +80,7 @@ const DogList = ({ dogList }: DogListProps) => {
                         />
                         <Stack
                             direction={{ xs: 'column', sm: 'row' }}
-                            spacing={{ xs: 1, sm: 2, md: 3 }}
+                            spacing={{ xs: 2, sm: 4 }}
                             margin={'30px 0px 0px 0px'}
                         >
                             <TextInput
@@ -100,6 +100,11 @@ const DogList = ({ dogList }: DogListProps) => {
                                 onChange={onChangeDate}
                                 disabled={!isStaff}
                             />
+                            <SexRadioButton
+                                onChangeSex={(sex) => onInput(sex, 'sex')}
+                                defaultValue={selectItem.sex}
+                                disabled={!isStaff}
+                            />
                             <TextInput
                                 value={selectItem.breeds}
                                 label={'Dog Breeds'}
@@ -109,6 +114,17 @@ const DogList = ({ dogList }: DogListProps) => {
                                 }}
                                 isRequired
                                 error={isSubmitting && !selectItem.breeds}
+                                disabled={!isStaff}
+                            />
+                            <TextInput
+                                value={selectItem.description}
+                                label={'Dog Description'}
+                                placeHolder={'Dog Description'}
+                                onInputText={(text) => {
+                                    onInput(text, 'description');
+                                }}
+                                isRequired
+                                error={isSubmitting && !selectItem.description}
                                 disabled={!isStaff}
                             />
                         </Stack>
