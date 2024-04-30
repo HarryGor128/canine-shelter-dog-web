@@ -18,6 +18,8 @@ interface RadioButtonProps {
     defaultValue?: string;
     row?: boolean;
     disabled?: boolean;
+    isRequired?: boolean;
+    error?: boolean;
 }
 
 const RadioButton = ({
@@ -27,10 +29,12 @@ const RadioButton = ({
     defaultValue,
     row,
     disabled,
+    isRequired,
+    error,
 }: RadioButtonProps) => {
     return (
-        <FormControl>
-            <FormLabel>{label}</FormLabel>
+        <FormControl error={error}>
+            <FormLabel>{`${label} ${isRequired ? '*' : ''}`}</FormLabel>
             <RadioGroup
                 defaultValue={defaultValue}
                 row={row}

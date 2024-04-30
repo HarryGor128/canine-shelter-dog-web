@@ -17,11 +17,15 @@ module.exports = {
     importOrder: [
         '^(react|react-(.*)$)',
         '<THIRD_PARTY_MODULES>',
-        '^(Components/(.*)$|./Components/(.*)$|../Components/(.*)$)',
-        '^(Page/(.*)$|./Page/(.*)$|../Page/(.*)$)',
+        '^(type/(.*)$|./type/(.*)$|../type/(.*)$)',
+        '^(components/(.*)$|./components/(.*)$|../components/(.*)$)',
+        '^(common/(.*)$|./common/(.*)$|../common/(.*)$)',
         '^(store/(.*)$|./store/(.*)$|../store/(.*)$)',
+        '^(utils/(.*)$|./utils/(.*)$|../utils/(.*)$)',
         '^[./(.*)$|../(.*)$]',
+        // '^(Page/(.*)$|./Page/(.*)$|../Page/(.*)$)',
     ],
     importOrderSeparation: true,
     importOrderSortSpecifiers: true,
+    plugins: ["@trivago/prettier-plugin-sort-imports"]
 };

@@ -1,13 +1,19 @@
 'use client';
-import { GridColDef, GridRowParams } from '@mui/x-data-grid';
-import Dog from '../../type/Dog';
-import AppTable from '../common/AppTable/AppTable';
-import dateConverter from '../../utils/date/dateConverter';
-import { Box, Modal, SxProps, Theme } from '@mui/material';
+
 import { CSSProperties, useState } from 'react';
-import { Close } from '@mui/icons-material';
-import DogDetail from '../DogDetail/DogDetail';
+
+import { Close, Send } from '@mui/icons-material';
+import { Box, Modal, SxProps, Theme } from '@mui/material';
+import { GridColDef, GridRowParams } from '@mui/x-data-grid';
+
+import AppTable from '../common/AppTable/AppTable';
+import { ButtonProps } from '../common/Button/Button';
 import ButtonGroup from '../common/ButtonGroup/ButtonGroup';
+
+import { useAppSelector } from '../../store/storeHooks';
+import Dog from '../../type/Dog';
+import dateConverter from '../../utils/date/dateConverter';
+import DogDetail from '../DogDetail/DogDetail';
 
 interface DogListProps {
     dogList: Dog[];
@@ -17,6 +23,8 @@ const DogList = ({ dogList }: DogListProps) => {
     const [showItemDetail, setShowItemDetail] = useState<boolean>(false);
     const [isSubmitting, setIsSubmitting] = useState<boolean>(false);
     const [selectItem, setSelectItem] = useState<Dog>(new Dog());
+
+    const { isStaff } = useAppSelector((state) => state.user);
 
     const displayField: GridColDef[] = [
         { field: 'name', headerName: 'Name', minWidth: 150 },
@@ -43,6 +51,7 @@ const DogList = ({ dogList }: DogListProps) => {
 
     const onCloseItem = () => {
         setShowItemDetail(false);
+        setIsSubmitting(false);
         setSelectItem(new Dog());
     };
 
@@ -51,6 +60,28 @@ const DogList = ({ dogList }: DogListProps) => {
             return { ...prev, [key]: value };
         });
     };
+
+    const onUpdateDog = () => {
+        setIsSubmitting(true);
+    };
+
+    let buttonGroup: ButtonProps[] = [
+        {
+            onPress: onCloseItem,
+            text: 'Close',
+            endIcon: <Close />,
+        },
+    ];
+
+    if (isStaff) {
+        buttonGroup = buttonGroup.concat([
+            {
+                onPress: onUpdateDog,
+                text: 'Update',
+                endIcon: <Send />,
+            },
+        ]);
+    }
 
     return (
         <div style={{ padding: 10 }}>
@@ -67,15 +98,7 @@ const DogList = ({ dogList }: DogListProps) => {
                             onInput={onInput}
                             isSubmitting={isSubmitting}
                         />
-                        <ButtonGroup
-                            buttonGroup={[
-                                {
-                                    onPress: onCloseItem,
-                                    text: 'Close',
-                                    startIcon: <Close />,
-                                },
-                            ]}
-                        />
+                        <ButtonGroup buttonGroup={buttonGroup} />
                     </div>
                 </Box>
             </Modal>
@@ -95,6 +118,7 @@ const popupStyle: SxProps<Theme> = {
     bgcolor: 'background.paper',
     boxShadow: 24,
     p: 4,
+    overflow: 'auto',
     borderRadius: 10,
 };
 
@@ -103,6 +127,5 @@ const popupBox: CSSProperties = {
     flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
-    overflow: 'auto',
     flexDirection: 'column',
 };

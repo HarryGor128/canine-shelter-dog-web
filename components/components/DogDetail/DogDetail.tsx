@@ -1,9 +1,11 @@
 import { Stack } from '@mui/material';
-import TextInput from '../common/TextInput/TextInput';
+
 import DatePicker from '../common/DatePicker/DatePicker';
-import SexRadioButton from '../SexRadioButton/SexRadioButton';
-import Dog from '../../type/Dog';
+import TextInput from '../common/TextInput/TextInput';
+
 import { useAppSelector } from '../../store/storeHooks';
+import Dog from '../../type/Dog';
+import SexRadioButton from '../SexRadioButton/SexRadioButton';
 
 interface DogDetailProps {
     dogInfo: Dog;
@@ -49,11 +51,13 @@ const DogDetail = ({ dogInfo, onInput, isSubmitting }: DogDetailProps) => {
                         onInput(date, 'dateOfBirth');
                     }}
                     disabled={!isStaff}
+                    isRequired
                 />
                 <SexRadioButton
                     onChangeSex={(sex) => onInput(sex, 'sex')}
                     defaultValue={dogInfo.sex}
                     disabled={!isStaff}
+                    error={isSubmitting && !dogInfo.sex}
                 />
                 <TextInput
                     value={dogInfo.breeds}

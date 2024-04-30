@@ -17,7 +17,7 @@ import MenuIcon from '@mui/icons-material/Menu';
 import { useAppSelector } from '../../../store/storeHooks';
 import { ReactNode, useState } from 'react';
 import { useRouter } from 'next/navigation';
-import { Add } from '@mui/icons-material';
+import { Add, Home } from '@mui/icons-material';
 
 interface AppHeaderProps {
     title: string;
@@ -39,9 +39,18 @@ const AppHeader = ({ title }: AppHeaderProps) => {
 
     const navigator: Navigator[] = [
         {
+            label: 'Home',
+            icon: <Home />,
+            goToPage: () => {
+                router.push('/Home');
+            },
+        },
+        {
             label: 'Add',
             icon: <Add />,
-            goToPage: () => {},
+            goToPage: () => {
+                router.push('/AddDog');
+            },
         },
     ];
 

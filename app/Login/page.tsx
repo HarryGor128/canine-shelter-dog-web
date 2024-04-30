@@ -1,15 +1,18 @@
 'use client';
+
 import { useContext, useState } from 'react';
-import LoginInfo from '../../components/type/LoginInfo';
-import { Box, Stack } from '@mui/material';
-import TextInput from '../../components/components/common/TextInput/TextInput';
-import Button from '../../components/components/common/Button/Button';
+
 import { Send } from '@mui/icons-material';
-import authServices from '../../components/services/authServices';
-import AppSnackBarContext from '../../components/components/common/AppSnackBar/context/AppSnackBarContext';
+import { Box, Stack } from '@mui/material';
 import { useRouter } from 'next/navigation';
-import { useAppDispatch } from '../../components/store/storeHooks';
+
+import AppSnackBarContext from '../../components/components/common/AppSnackBar/context/AppSnackBarContext';
+import Button from '../../components/components/common/Button/Button';
+import TextInput from '../../components/components/common/TextInput/TextInput';
+import authServices from '../../components/services/authServices';
 import { setIsStaff } from '../../components/store/reducer/userSlice';
+import { useAppDispatch } from '../../components/store/storeHooks';
+import LoginInfo from '../../components/type/LoginInfo';
 
 const Login = () => {
     const [loginInfo, setLoginInfo] = useState<LoginInfo>(new LoginInfo());

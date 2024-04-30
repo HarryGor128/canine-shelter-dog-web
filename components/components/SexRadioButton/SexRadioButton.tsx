@@ -4,12 +4,14 @@ interface SexRadioButtonProps {
     onChangeSex: (sex: string) => void;
     defaultValue?: string;
     disabled?: boolean;
+    error?: boolean;
 }
 
 const SexRadioButton = ({
     onChangeSex,
     defaultValue,
     disabled,
+    error,
 }: SexRadioButtonProps) => {
     return (
         <RadioButton
@@ -22,6 +24,8 @@ const SexRadioButton = ({
             defaultValue={defaultValue}
             row
             disabled={disabled}
+            isRequired
+            error={error}
         />
     );
 };

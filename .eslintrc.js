@@ -11,4 +11,5 @@ module.exports = {
         'react/react-in-jsx-scope': 'off',
         'react-hooks/exhaustive-deps': 'off',
     },
+    plugins: ["@trivago/prettier-plugin-sort-imports"]
 };
