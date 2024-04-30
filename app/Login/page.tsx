@@ -69,7 +69,7 @@ const Login = () => {
                 <TextInput
                     label={'Email'}
                     placeHolder={'Email'}
-                    onInput={(text) => {
+                    onInputText={(text) => {
                         onInput(text, 'email');
                     }}
                     isRequired
@@ -78,7 +78,7 @@ const Login = () => {
                 <TextInput
                     label={'Password'}
                     placeHolder={'Password'}
-                    onInput={(text) => {
+                    onInputText={(text) => {
                         onInput(text, 'password');
                     }}
                     isRequired

@@ -19,6 +19,7 @@ const AppTable = ({ data, displayField, onPressItem }: AppTableProps) => {
             pageSizeOptions={[30, 50, 100]}
             onRowClick={onPressItem}
             disableMultipleRowSelection
+            style={{ minHeight: 200 }}
         />
     );
 };

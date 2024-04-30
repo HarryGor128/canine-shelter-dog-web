@@ -71,7 +71,7 @@ const Registration = () => {
                 <TextInput
                     label={'Email'}
                     placeHolder={'Email'}
-                    onInput={(text) => {
+                    onInputText={(text) => {
                         onInput(text, 'email');
                     }}
                     isRequired
@@ -80,7 +80,7 @@ const Registration = () => {
                 <TextInput
                     label={'Password'}
                     placeHolder={'Password'}
-                    onInput={(text) => {
+                    onInputText={(text) => {
                         onInput(text, 'password');
                     }}
                     isRequired
@@ -90,7 +90,7 @@ const Registration = () => {
                 <TextInput
                     label={'Sign Up Code'}
                     placeHolder={'Sign Up Code'}
-                    onInput={(text) => {
+                    onInputText={(text) => {
                         onInput(text, 'signUpCode');
                     }}
                 />

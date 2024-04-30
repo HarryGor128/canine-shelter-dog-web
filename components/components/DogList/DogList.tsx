@@ -1,23 +1,59 @@
+'use client';
+
 import { GridColDef, GridRowParams } from '@mui/x-data-grid';
 import Dog from '../../type/Dog';
 import AppTable from '../common/AppTable/AppTable';
+import dateConverter from '../../utils/date/dateConverter';
+import { useAppSelector } from '../../store/storeHooks';
+import { Box, Modal, Stack, SxProps, Theme } from '@mui/material';
+import { useState } from 'react';
+import TextInput from '../common/TextInput/TextInput';
 
 interface DogListProps {
     dogList: Dog[];
 }
 
 const DogList = ({ dogList }: DogListProps) => {
+    const [showItemDetail, setShowItemDetail] = useState<boolean>(false);
+    const [isSubmitting, setIsSubmitting] = useState<boolean>(false);
+    const [selectItem, setSelectItem] = useState<Dog>(new Dog());
+
+    const { isStaff } = useAppSelector((state) => state.user);
+
     const displayData = dogList;
 
     const displayField: GridColDef[] = [
         { field: 'name', headerName: 'Name', minWidth: 150 },
-        { field: 'dateOfBirth', headerName: 'Date of birth', minWidth: 120 },
+        {
+            field: 'dateOfBirth',
+            headerName: 'Date of birth (Age)',
+            minWidth: 200,
+            valueFormatter: (value) => {
+                const dateOfBirth = dateConverter.unixTimeToDateString(value);
+                const age = dateConverter.getAge(value);
+
+                return `${dateOfBirth} (${age})`;
+            },
+            filterable: false,
+        },
         { field: 'sex', headerName: 'Sex', minWidth: 50 },
-        { field: 'breeds', headerName: 'Breeds', minWidth: 100 },
+        { field: 'breeds', headerName: 'Breeds', minWidth: 250 },
     ];
 
     const onPressItem = (event: GridRowParams<any>) => {
-        console.log('🚀 ~ file: DogList.tsx:20 ~ onPressItem ~ event:', event);
+        setShowItemDetail(true);
+        setSelectItem(event.row);
+    };
+
+    const onCloseItem = () => {
+        setShowItemDetail(false);
+        setSelectItem(new Dog());
+    };
+
+    const onInput = (text: string, key: keyof Dog) => {
+        setSelectItem((prev) => {
+            return { ...prev, [key]: text };
+        });
     };
 
     return (
@@ -27,8 +63,71 @@ const DogList = ({ dogList }: DogListProps) => {
                 displayField={displayField}
                 onPressItem={onPressItem}
             />
+            <Modal open={showItemDetail} onClose={onCloseItem}>
+                <Box sx={popupStyle}>
+                    <div
+                        style={{
+                            display: 'flex',
+                            flex: 1,
+                            justifyContent: 'center',
+                            alignItems: 'center',
+                            overflow: 'auto',
+                            flexDirection: 'column',
+                        }}
+                    >
+                        <img
+                            src={selectItem.photo}
+                            style={{
+                                height: 200,
+                                contain: 'content',
+                            }}
+                        />
+                        <Stack
+                            direction={'column'}
+                            spacing={2}
+                            margin={'30px 0px 0px 0px'}
+                        >
+                            <TextInput
+                                value={selectItem.name}
+                                label={'Dog Name'}
+                                placeHolder={'Dog Name'}
+                                onInputText={(text) => {
+                                    onInput(text, 'name');
+                                }}
+                                isRequired
+                                error={isSubmitting && !selectItem.name}
+                                disabled={!isStaff}
+                            />
+                            <TextInput
+                                value={selectItem.breeds}
+                                label={'Dog Breeds'}
+                                placeHolder={'Dog Breeds'}
+                                onInputText={(text) => {
+                                    onInput(text, 'breeds');
+                                }}
+                                isRequired
+                                error={isSubmitting && !selectItem.breeds}
+                                disabled={!isStaff}
+                            />
+                        </Stack>
+                    </div>
+                </Box>
+            </Modal>
         </div>
     );
 };
 
 export default DogList;
+
+const popupStyle: SxProps<Theme> = {
+    position: 'absolute' as 'absolute',
+    top: '50%',
+    left: '50%',
+    transform: 'translate(-50%, -50%)',
+    width: '80%',
+    maxHeight: '80%',
+    bgcolor: 'background.paper',
+    boxShadow: 24,
+    p: 4,
+    borderRadius: 10,
+};

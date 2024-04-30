@@ -1,31 +1,30 @@
 import { TextField, TextFieldProps } from '@mui/material';
 import { ChangeEvent, CSSProperties } from 'react';
 
-interface TextInputProps {
+type TextInputProps = {
     label: string;
-    onInput: (text: string) => void;
+    onInputText: (text: string) => void;
     isRequired?: boolean;
     placeHolder?: string;
     style?: CSSProperties;
     error?: boolean;
     isSecret?: boolean;
-    muiTextFieldProps?: TextFieldProps;
-}
+} & TextFieldProps;
 
 const TextInput = ({
     label,
-    onInput,
+    onInputText,
     isRequired,
     placeHolder,
     style,
     error,
     isSecret,
-    muiTextFieldProps,
+    ...props
 }: TextInputProps) => {
     const input = (
         change: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>,
     ) => {
-        onInput(change.target.value);
+        onInputText(change.target.value);
     };
 
     return (
@@ -37,7 +36,7 @@ const TextInput = ({
             style={style}
             error={error}
             type={isSecret ? 'password' : undefined}
-            {...muiTextFieldProps}
+            {...props}
         />
     );
 };

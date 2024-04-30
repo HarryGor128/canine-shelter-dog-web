@@ -11,7 +11,9 @@ const Home = () => {
 
     const getDogList = async () => {
         const result = await dogServices.getAllDogsInfo();
-        setDogList(result);
+        if (result.length > 0) {
+            setDogList(result);
+        }
     };
 
     useEffect(() => {
@@ -21,7 +23,19 @@ const Home = () => {
     return (
         <>
             <AppHeader title={'Home'} />
-            <DogList dogList={dogList} />
+            {dogList.length > 0 ? (
+                <DogList dogList={dogList} />
+            ) : (
+                <div
+                    style={{
+                        flex: 1,
+                        justifySelf: 'center',
+                        alignItems: 'center',
+                    }}
+                >
+                    No Result
+                </div>
+            )}
         </>
     );
 };
