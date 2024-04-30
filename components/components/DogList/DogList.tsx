@@ -6,8 +6,9 @@ import AppTable from '../common/AppTable/AppTable';
 import dateConverter from '../../utils/date/dateConverter';
 import { useAppSelector } from '../../store/storeHooks';
 import { Box, Modal, Stack, SxProps, Theme } from '@mui/material';
-import { useState } from 'react';
+import { CSSProperties, useState } from 'react';
 import TextInput from '../common/TextInput/TextInput';
+import DatePicker from '../common/DatePicker/DatePicker';
 
 interface DogListProps {
     dogList: Dog[];
@@ -19,8 +20,6 @@ const DogList = ({ dogList }: DogListProps) => {
     const [selectItem, setSelectItem] = useState<Dog>(new Dog());
 
     const { isStaff } = useAppSelector((state) => state.user);
-
-    const displayData = dogList;
 
     const displayField: GridColDef[] = [
         { field: 'name', headerName: 'Name', minWidth: 150 },
@@ -56,25 +55,22 @@ const DogList = ({ dogList }: DogListProps) => {
         });
     };
 
+    const onChangeDate = (newDate: number) => {
+        setSelectItem((prev) => {
+            return { ...prev, dateOfBirth: newDate };
+        });
+    };
+
     return (
         <div style={{ padding: 10 }}>
             <AppTable
-                data={displayData}
+                data={dogList}
                 displayField={displayField}
                 onPressItem={onPressItem}
             />
             <Modal open={showItemDetail} onClose={onCloseItem}>
                 <Box sx={popupStyle}>
-                    <div
-                        style={{
-                            display: 'flex',
-                            flex: 1,
-                            justifyContent: 'center',
-                            alignItems: 'center',
-                            overflow: 'auto',
-                            flexDirection: 'column',
-                        }}
-                    >
+                    <div style={popupBox}>
                         <img
                             src={selectItem.photo}
                             style={{
@@ -83,8 +79,8 @@ const DogList = ({ dogList }: DogListProps) => {
                             }}
                         />
                         <Stack
-                            direction={'column'}
-                            spacing={2}
+                            direction={{ xs: 'column', sm: 'row' }}
+                            spacing={{ xs: 1, sm: 2, md: 3 }}
                             margin={'30px 0px 0px 0px'}
                         >
                             <TextInput
@@ -96,6 +92,12 @@ const DogList = ({ dogList }: DogListProps) => {
                                 }}
                                 isRequired
                                 error={isSubmitting && !selectItem.name}
+                                disabled={!isStaff}
+                            />
+                            <DatePicker
+                                value={selectItem.dateOfBirth}
+                                label={'Date Of Birth'}
+                                onChange={onChangeDate}
                                 disabled={!isStaff}
                             />
                             <TextInput
@@ -130,4 +132,13 @@ const popupStyle: SxProps<Theme> = {
     boxShadow: 24,
     p: 4,
     borderRadius: 10,
+};
+
+const popupBox: CSSProperties = {
+    display: 'flex',
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+    overflow: 'auto',
+    flexDirection: 'column',
 };

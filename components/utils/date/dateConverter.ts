@@ -7,6 +7,10 @@ const dateConverter = {
     },
 
     now() {
+        return DateTime.now().toFormat(DateFormat.YYYYMMddHHmm);
+    },
+
+    nowDateObj() {
         return DateTime.now();
     },
 
@@ -39,6 +43,28 @@ const dateConverter = {
         let roundedAge = Math.floor(age);
 
         return roundedAge;
+    },
+
+    dateStringToDateObj(
+        dataString: string,
+        format: DateFormat = DateFormat.YYYYMMDD,
+    ) {
+        return DateTime.fromFormat(dataString, format);
+    },
+
+    unixTimeToDateObj(date: number) {
+        return DateTime.fromSeconds(date);
+    },
+
+    dateObjToUnixTime(date: DateTime<true>) {
+        return date.toSeconds();
+    },
+
+    dateObjToDateString(
+        date: DateTime<true>,
+        format: DateFormat = DateFormat.YYYYMMDD,
+    ) {
+        return date.toFormat(format);
     },
 };
 
