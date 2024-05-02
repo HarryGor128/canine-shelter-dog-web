@@ -1,8 +1,8 @@
 'use client';
 
-import { CSSProperties, useState } from 'react';
+import { CSSProperties, useContext, useState } from 'react';
 
-import { Close, Send } from '@mui/icons-material';
+import { Close, Delete, Send } from '@mui/icons-material';
 import { Box, Modal, SxProps, Theme } from '@mui/material';
 import { GridColDef, GridRowParams } from '@mui/x-data-grid';
 
@@ -14,17 +14,22 @@ import { useAppSelector } from '../../store/storeHooks';
 import Dog from '../../type/Dog';
 import dateConverter from '../../utils/date/dateConverter';
 import DogDetail from '../DogDetail/DogDetail';
+import dogServices from '../../services/dogServices';
+import AppSnackBarContext from '../common/AppSnackBar/context/AppSnackBarContext';
 
 interface DogListProps {
     dogList: Dog[];
+    refreshList?: Function;
 }
 
-const DogList = ({ dogList }: DogListProps) => {
+const DogList = ({ dogList, refreshList }: DogListProps) => {
     const [showItemDetail, setShowItemDetail] = useState<boolean>(false);
     const [isSubmitting, setIsSubmitting] = useState<boolean>(false);
     const [selectItem, setSelectItem] = useState<Dog>(new Dog());
 
     const { isStaff } = useAppSelector((state) => state.user);
+
+    const { setIsOpen, setMsg, setType } = useContext(AppSnackBarContext);
 
     const displayField: GridColDef[] = [
         { field: 'name', headerName: 'Name', minWidth: 150 },
@@ -61,8 +66,39 @@ const DogList = ({ dogList }: DogListProps) => {
         });
     };
 
-    const onUpdateDog = () => {
+    const onUpdateDog = async () => {
         setIsSubmitting(true);
+        const result = await dogServices.updateDogInfo(selectItem);
+
+        if (result.result) {
+            setMsg('Update Success');
+            setType('success');
+        } else {
+            setMsg('Update Fail');
+            setType('error');
+        }
+        setIsOpen(true);
+
+        if (refreshList) {
+            refreshList();
+        }
+    };
+
+    const onDeleteDog = async () => {
+        const result = await dogServices.deleteDogInfo(selectItem.id);
+
+        if (result.result) {
+            setMsg('Delete Success');
+            setType('success');
+        } else {
+            setMsg('Delete Fail');
+            setType('error');
+        }
+        setIsOpen(true);
+
+        if (refreshList) {
+            refreshList();
+        }
     };
 
     let buttonGroup: ButtonProps[] = [
@@ -79,6 +115,11 @@ const DogList = ({ dogList }: DogListProps) => {
                 onPress: onUpdateDog,
                 text: 'Update',
                 endIcon: <Send />,
+            },
+            {
+                onPress: onDeleteDog,
+                text: 'Delete',
+                endIcon: <Delete />,
             },
         ]);
     }

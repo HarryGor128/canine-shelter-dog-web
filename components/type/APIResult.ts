@@ -7,3 +7,5 @@ class APIResult {
         this.msg = '';
     }
 }
+
+export default APIResult;

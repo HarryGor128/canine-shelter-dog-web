@@ -5,6 +5,7 @@ import ApiEndpoint from '../constant/ApiEndpoint';
 import { setUser } from '../store/reducer/userSlice';
 import { store } from '../store/store';
 import { setIsLogin } from '../store/reducer/appStateSlice';
+import APIResult from '../type/APIResult';
 
 const authServices = {
     async login(loginInfo: LoginInfo): Promise<APIResult> {
