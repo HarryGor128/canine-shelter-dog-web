@@ -66,6 +66,8 @@ const DogList = ({ dogList, refreshList }: DogListProps) => {
         });
     };
 
+    const onUploadPhoto = () => {};
+
     const onUpdateDog = async () => {
         setIsSubmitting(true);
         const result = await dogServices.updateDogInfo(selectItem);
@@ -73,6 +75,7 @@ const DogList = ({ dogList, refreshList }: DogListProps) => {
         if (result.result) {
             setMsg('Update Success');
             setType('success');
+            onCloseItem();
         } else {
             setMsg('Update Fail');
             setType('error');
@@ -90,6 +93,7 @@ const DogList = ({ dogList, refreshList }: DogListProps) => {
         if (result.result) {
             setMsg('Delete Success');
             setType('success');
+            onCloseItem();
         } else {
             setMsg('Delete Fail');
             setType('error');
@@ -137,6 +141,7 @@ const DogList = ({ dogList, refreshList }: DogListProps) => {
                         <DogDetail
                             dogInfo={selectItem}
                             onInput={onInput}
+                            onUploadPhoto={onUploadPhoto}
                             isSubmitting={isSubmitting}
                         />
                         <ButtonGroup buttonGroup={buttonGroup} />

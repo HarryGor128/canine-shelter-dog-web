@@ -22,6 +22,8 @@ const AddDog = () => {
 
     const onAddDog = () => {};
 
+    const onUploadPhoto = () => {};
+
     const buttonGroup: ButtonProps[] = [
         {
             onPress: onAddDog,
@@ -37,6 +39,7 @@ const AddDog = () => {
                 <DogDetail
                     dogInfo={dogInfo}
                     onInput={onInput}
+                    onUploadPhoto={onUploadPhoto}
                     isSubmitting={isSubmitting}
                 />
                 <ButtonGroup buttonGroup={buttonGroup} />
@@ -48,9 +51,11 @@ const AddDog = () => {
 export default AddDog;
 
 const popupBox: CSSProperties = {
+    margin: '50px 0',
     display: 'flex',
     flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
     flexDirection: 'column',
+    overflow: 'auto',
 };
