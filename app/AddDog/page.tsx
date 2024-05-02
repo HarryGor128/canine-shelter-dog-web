@@ -1,6 +1,6 @@
 'use client';
 
-import { CSSProperties, useState } from 'react';
+import { ChangeEvent, CSSProperties, useState } from 'react';
 
 import { Add } from '@mui/icons-material';
 
@@ -22,7 +22,9 @@ const AddDog = () => {
 
     const onAddDog = () => {};
 
-    const onUploadPhoto = () => {};
+    const onUploadPhoto = (event: ChangeEvent<HTMLInputElement>) => {
+        console.log('🚀 ~ file: page.tsx:26 ~ onUploadPhoto ~ event:', event);
+    };
 
     const buttonGroup: ButtonProps[] = [
         {
