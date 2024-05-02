@@ -1,4 +1,5 @@
 import { DateTime } from 'luxon';
+
 import DateFormat from './DateFormat';
 
 const dateConverter = {
@@ -8,6 +9,10 @@ const dateConverter = {
 
     now() {
         return DateTime.now().toFormat(DateFormat.YYYYMMddHHmm);
+    },
+
+    nowFileName() {
+        return DateTime.now().toFormat(DateFormat.FileName);
     },
 
     nowDateObj() {

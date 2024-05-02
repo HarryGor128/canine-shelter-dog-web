@@ -1,6 +1,7 @@
 enum DateFormat {
     YYYYMMDD = 'yyyy-MM-dd',
     YYYYMMddHHmm = 'yyyy-MM-dd HH:mm',
+    FileName = 'yyyyMMddHHmmss',
     Now = 'yyyy-MM-dd HH:mm:ss',
     HHmm = 'HH:mm',
     HHmmss = 'HH:mm:ss',

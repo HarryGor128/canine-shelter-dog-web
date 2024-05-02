@@ -1,7 +1,10 @@
 import axios from 'axios';
-import ApiEndpoint from '../constant/ApiEndpoint';
-import Dog from '../type/Dog';
+
 import APIResult from '../type/APIResult';
+import Dog from '../type/Dog';
+import UploadFile from '../type/UploadFile';
+
+import ApiEndpoint from '../constant/ApiEndpoint';
 
 const dogServices = {
     async getAllDogsInfo(): Promise<Dog[]> {
@@ -102,6 +105,21 @@ const dogServices = {
                 result: false,
                 msg: error as string,
             });
+        }
+    },
+
+    async uploadDogPhoto(file: UploadFile): Promise<string> {
+        try {
+            const result = await axios.post(
+                ApiEndpoint.dog.uploadDogPhoto,
+                file,
+            );
+            console.log('🚀 ~ uploadDogPhoto ~ result:', result);
+
+            return Promise.resolve(result.data);
+        } catch (error) {
+            console.log('🚀 ~ uploadDogPhoto ~ error:', error);
+            return Promise.resolve(error as string);
         }
     },
 };
