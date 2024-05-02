@@ -1,5 +1,4 @@
 'use client';
-
 import { useContext, useState } from 'react';
 
 import { Send } from '@mui/icons-material';
@@ -13,10 +12,14 @@ import authServices from '../../components/services/authServices';
 import { setIsStaff } from '../../components/store/reducer/userSlice';
 import { useAppDispatch } from '../../components/store/storeHooks';
 import LoginInfo from '../../components/type/LoginInfo';
+import { useCookies } from 'next-client-cookies';
+import CookieKey from '../../components/constant/CookieKey';
 
 const Login = () => {
     const [loginInfo, setLoginInfo] = useState<LoginInfo>(new LoginInfo());
     const [isSubmitting, setIsSubmitting] = useState<boolean>(false);
+
+    const cookies = useCookies();
 
     const router = useRouter();
 
@@ -42,6 +45,9 @@ const Login = () => {
 
                 const getRole = await authServices.roleQuery(loginInfo.email);
                 dispatch(setIsStaff(getRole));
+
+                cookies.set(CookieKey.LoginInfo, JSON.stringify(loginInfo));
+                cookies.set(CookieKey.UserRole, getRole.toString());
 
                 router.back();
             } else {

@@ -7,6 +7,7 @@ import '@fontsource/roboto/400.css';
 import '@fontsource/roboto/500.css';
 import '@fontsource/roboto/700.css';
 import AppSnackBar from '../components/components/common/AppSnackBar/AppSnackBar';
+import { CookiesProvider } from 'next-client-cookies/server';
 
 const inter = Inter({ subsets: ['latin'] });
 
@@ -23,11 +24,13 @@ export default function RootLayout({
     return (
         <html lang='en'>
             <body className={inter.className} style={{ margin: 0 }}>
-                <AppProvider>
-                    <HookProvider>
-                        <AppSnackBar>{children}</AppSnackBar>
-                    </HookProvider>
-                </AppProvider>
+                <CookiesProvider>
+                    <AppProvider>
+                        <HookProvider>
+                            <AppSnackBar>{children}</AppSnackBar>
+                        </HookProvider>
+                    </AppProvider>
+                </CookiesProvider>
             </body>
         </html>
     );

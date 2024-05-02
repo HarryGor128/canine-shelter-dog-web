@@ -24,7 +24,7 @@ const Home = () => {
         <>
             <AppHeader title={'Home'} />
             {dogList.length > 0 ? (
-                <DogList dogList={dogList} />
+                <DogList dogList={dogList} refreshList={getDogList} />
             ) : (
                 <div
                     style={{
