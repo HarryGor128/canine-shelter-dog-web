@@ -1,3 +1,6 @@
+import { ChangeEvent } from 'react';
+
+import { UploadFile } from '@mui/icons-material';
 import { Stack } from '@mui/material';
 
 import DatePicker from '../common/DatePicker/DatePicker';
@@ -6,8 +9,6 @@ import TextInput from '../common/TextInput/TextInput';
 import { useAppSelector } from '../../store/storeHooks';
 import Dog from '../../type/Dog';
 import SexRadioButton from '../SexRadioButton/SexRadioButton';
-import { ChangeEvent } from 'react';
-import { UploadFile } from '@mui/icons-material';
 
 interface DogDetailProps {
     dogInfo: Dog;
@@ -49,12 +50,14 @@ const DogDetail = ({
                     <UploadFile color={'primary'} fontSize={'large'} />
                 </div>
             )}
-            <input
-                style={{ margin: '20px 0 0 0' }}
-                onChange={onUploadPhoto}
-                type={'file'}
-                accept={'image/*'}
-            />
+            {isStaff && (
+                <input
+                    style={{ margin: '20px 0 0 0' }}
+                    onChange={onUploadPhoto}
+                    type={'file'}
+                    accept={'image/*'}
+                />
+            )}
             <Stack
                 direction={{ xs: 'column', sm: 'row' }}
                 spacing={{ xs: 2, sm: 4 }}

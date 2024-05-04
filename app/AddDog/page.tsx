@@ -41,6 +41,8 @@ const AddDog = () => {
             if (result.result) {
                 setMsg('Add Success');
                 setType('success');
+                setDogInfo(new Dog());
+                setIsSubmitting(false);
             } else {
                 setMsg(result.msg);
                 setType('error');
