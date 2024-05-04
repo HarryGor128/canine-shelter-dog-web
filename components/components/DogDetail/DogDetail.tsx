@@ -52,7 +52,7 @@ const DogDetail = ({
             setBreedImg(result);
         };
 
-        if (!breedImg.includes(dogInfo.breeds)) {
+        if (dogInfo.breeds && !breedImg.includes(dogInfo.breeds)) {
             getBreedImg();
         }
     }, [dogInfo.breeds]);
@@ -150,19 +150,35 @@ const DogDetail = ({
                     disabled={!isStaff}
                     error={isSubmitting && !dogInfo.sex}
                 />
-                <DropDownList
-                    label={'Dog Breed'}
-                    optionList={dogBreedsList.map((item) => {
-                        return { value: item, label: item };
-                    })}
-                    onSelectOption={(value) => {
-                        onInput(value, 'breeds');
+                <div
+                    style={{
+                        flexDirection: 'row',
+                        alignItems: 'center',
+                        display: 'flex',
                     }}
-                    defaultValue={dogInfo.breeds}
-                    disabled={!isStaff}
-                    isRequired
-                    error={isSubmitting && !dogInfo.breeds}
-                />
+                >
+                    <DropDownList
+                        label={'Dog Breed'}
+                        optionList={dogBreedsList.map((item) => {
+                            return { value: item, label: item };
+                        })}
+                        onSelectOption={(value) => {
+                            onInput(value, 'breeds');
+                        }}
+                        defaultValue={dogInfo.breeds}
+                        disabled={!isStaff}
+                        isRequired
+                        error={isSubmitting && !dogInfo.breeds}
+                    />
+                    <img
+                        src={breedImg}
+                        style={{
+                            margin: '0 20px',
+                            contain: 'content',
+                            height: 100,
+                        }}
+                    />
+                </div>
                 <TextInput
                     value={dogInfo.description}
                     label={'Dog Description'}
