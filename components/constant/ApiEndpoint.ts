@@ -6,6 +6,8 @@ const ApiEndpoint = {
         updateDogInfo: 'dog/updateDogInfo',
         deleteDogInfo: 'dog/deleteDogInfo',
         uploadDogPhoto: 'dog/uploadDogPhoto',
+        getBreedsList: 'dog/getBreedsList',
+        getBreedImg: 'dog/getBreedImg',
     },
     auth: {
         Login: 'auth/login',

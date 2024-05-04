@@ -1,12 +1,15 @@
-import { ChangeEvent, useRef } from 'react';
+import { ChangeEvent, useEffect, useRef, useState } from 'react';
 
 import { UploadFile as UploadIcon } from '@mui/icons-material';
 import { Stack } from '@mui/material';
 
 import DatePicker from '../common/DatePicker/DatePicker';
+import DropDownList from '../common/DropDownList/DropDownList';
 import TextInput from '../common/TextInput/TextInput';
 
-import { useAppSelector } from '../../store/storeHooks';
+import dogServices from '../../services/dogServices';
+import { setDogBreedsList } from '../../store/reducer/dogSlice';
+import { useAppDispatch, useAppSelector } from '../../store/storeHooks';
 import Dog from '../../type/Dog';
 import UploadFile from '../../type/UploadFile';
 import convertBase64 from '../../utils/base64Converter';
@@ -26,6 +29,34 @@ const DogDetail = ({
     onUploadPhoto,
     isSubmitting,
 }: DogDetailProps) => {
+    const [breedImg, setBreedImg] = useState<string>('');
+
+    const { dogBreedsList } = useAppSelector((state) => state.dog);
+    const dispatch = useAppDispatch();
+
+    useEffect(() => {
+        const getBreedsList = async () => {
+            const result = await dogServices.getDogBreedsList();
+            dispatch(setDogBreedsList(result));
+        };
+
+        if (dogBreedsList.length <= 0) {
+            getBreedsList();
+        }
+    }, []);
+
+    useEffect(() => {
+        const getBreedImg = async () => {
+            const result = await dogServices.getBreedImg(dogInfo.breeds);
+
+            setBreedImg(result);
+        };
+
+        if (!breedImg.includes(dogInfo.breeds)) {
+            getBreedImg();
+        }
+    }, [dogInfo.breeds]);
+
     const fileInput = useRef<HTMLInputElement>(null);
 
     const { isStaff } = useAppSelector((state) => state.user);
@@ -119,16 +150,18 @@ const DogDetail = ({
                     disabled={!isStaff}
                     error={isSubmitting && !dogInfo.sex}
                 />
-                <TextInput
-                    value={dogInfo.breeds}
-                    label={'Dog Breeds'}
-                    placeHolder={'Dog Breeds'}
-                    onInputText={(text) => {
-                        onInput(text, 'breeds');
+                <DropDownList
+                    label={'Dog Breed'}
+                    optionList={dogBreedsList.map((item) => {
+                        return { value: item, label: item };
+                    })}
+                    onSelectOption={(value) => {
+                        onInput(value, 'breeds');
                     }}
+                    defaultValue={dogInfo.breeds}
+                    disabled={!isStaff}
                     isRequired
                     error={isSubmitting && !dogInfo.breeds}
-                    disabled={!isStaff}
                 />
                 <TextInput
                     value={dogInfo.description}

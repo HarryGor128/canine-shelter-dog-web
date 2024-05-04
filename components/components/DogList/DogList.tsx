@@ -63,6 +63,7 @@ const DogList = ({ dogList, refreshList }: DogListProps) => {
     };
 
     const onInput = (value: string | number, key: keyof Dog) => {
+        console.log('🚀 ~ file: DogList.tsx:66 ~ onInput ~ value:', value);
         setSelectItem((prev) => {
             return { ...prev, [key]: value };
         });
@@ -77,25 +78,30 @@ const DogList = ({ dogList, refreshList }: DogListProps) => {
 
     const onUpdateDog = async () => {
         setIsSubmitting(true);
-        const uploadPhotoResult = await dogServices.uploadDogPhoto(uploadFile);
 
-        if (uploadPhotoResult) {
-            const result = await dogServices.updateDogInfo({
-                ...selectItem,
-                photo: uploadPhotoResult,
-            });
+        const uploadPhotoResult = uploadFile
+            ? await dogServices.uploadDogPhoto(uploadFile)
+            : '';
 
-            if (result.result) {
-                setMsg('Update Success');
-                setType('success');
-                setIsOpen(true);
+        const result = await dogServices.updateDogInfo(
+            uploadPhotoResult
+                ? {
+                      ...selectItem,
+                      photo: uploadPhotoResult,
+                  }
+                : selectItem,
+        );
 
-                onCloseItem();
-            }
+        if (result.result) {
+            setMsg('Update Success');
+            setType('success');
+            setIsOpen(true);
 
-            if (refreshList) {
-                refreshList();
-            }
+            onCloseItem();
+        }
+
+        if (refreshList) {
+            refreshList();
         }
     };
 

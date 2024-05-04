@@ -122,6 +122,28 @@ const dogServices = {
             return Promise.resolve(error as string);
         }
     },
+
+    async getDogBreedsList(): Promise<string[]> {
+        try {
+            const result = await axios.get(ApiEndpoint.dog.getBreedsList);
+
+            return Promise.resolve(result.data);
+        } catch (error) {
+            return Promise.resolve([]);
+        }
+    },
+
+    async getBreedImg(breed: string): Promise<string> {
+        try {
+            const result = await axios.get(ApiEndpoint.dog.getBreedImg, {
+                params: { breed },
+            });
+
+            return Promise.resolve(result.data);
+        } catch (error) {
+            return Promise.resolve('');
+        }
+    },
 };
 
 export default dogServices;
