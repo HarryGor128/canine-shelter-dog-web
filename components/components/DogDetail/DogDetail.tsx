@@ -1,6 +1,6 @@
-import { ChangeEvent } from 'react';
+import { ChangeEvent, useRef } from 'react';
 
-import { UploadFile } from '@mui/icons-material';
+import { UploadFile as UploadIcon } from '@mui/icons-material';
 import { Stack } from '@mui/material';
 
 import DatePicker from '../common/DatePicker/DatePicker';
@@ -8,12 +8,15 @@ import TextInput from '../common/TextInput/TextInput';
 
 import { useAppSelector } from '../../store/storeHooks';
 import Dog from '../../type/Dog';
+import UploadFile from '../../type/UploadFile';
+import convertBase64 from '../../utils/base64Converter';
+import dateConverter from '../../utils/date/dateConverter';
 import SexRadioButton from '../SexRadioButton/SexRadioButton';
 
 interface DogDetailProps {
     dogInfo: Dog;
     onInput: (value: string | number, key: keyof Dog) => void;
-    onUploadPhoto: (event: ChangeEvent<HTMLInputElement>) => void;
+    onUploadPhoto: (file: UploadFile) => void;
     isSubmitting?: boolean;
 }
 
@@ -23,7 +26,30 @@ const DogDetail = ({
     onUploadPhoto,
     isSubmitting,
 }: DogDetailProps) => {
+    const fileInput = useRef<HTMLInputElement>(null);
+
     const { isStaff } = useAppSelector((state) => state.user);
+
+    const onUpload = async (event: ChangeEvent<HTMLInputElement>) => {
+        const fileList: FileList | null = event.target.files;
+        if (fileList) {
+            const file = fileList[0];
+            const base64 = await convertBase64(file);
+
+            const fileName = file.name.split('.');
+            const fileType = fileName[fileName.length - 1];
+
+            const result: UploadFile = {
+                base64,
+                fileName: `${dateConverter.nowFileName()}.${fileType}`,
+            };
+            onUploadPhoto(result);
+
+            if (fileInput.current) {
+                fileInput.current.value = '';
+            }
+        }
+    };
 
     return (
         <>
@@ -47,13 +73,14 @@ const DogDetail = ({
                         backgroundColor: '#00000050',
                     }}
                 >
-                    <UploadFile color={'primary'} fontSize={'large'} />
+                    <UploadIcon color={'primary'} fontSize={'large'} />
                 </div>
             )}
             {isStaff && (
                 <input
+                    ref={fileInput}
                     style={{ margin: '20px 0 0 0' }}
-                    onChange={onUploadPhoto}
+                    onChange={onUpload}
                     type={'file'}
                     accept={'image/*'}
                 />

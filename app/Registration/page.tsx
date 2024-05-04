@@ -1,15 +1,18 @@
 'use client';
+
 import { useContext, useState } from 'react';
-import RegistrationInfo from '../../components/type/RegistrationInfo';
-import { Box, Stack } from '@mui/material';
-import TextInput from '../../components/components/common/TextInput/TextInput';
-import Button from '../../components/components/common/Button/Button';
+
 import { Send } from '@mui/icons-material';
-import AppSnackBarContext from '../../components/components/common/AppSnackBar/context/AppSnackBarContext';
+import { Box, Stack } from '@mui/material';
 import { useRouter } from 'next/navigation';
+
+import AppSnackBarContext from '../../components/components/common/AppSnackBar/context/AppSnackBarContext';
+import Button from '../../components/components/common/Button/Button';
+import TextInput from '../../components/components/common/TextInput/TextInput';
 import authServices from '../../components/services/authServices';
 import { setIsStaff } from '../../components/store/reducer/userSlice';
 import { useAppDispatch } from '../../components/store/storeHooks';
+import RegistrationInfo from '../../components/type/RegistrationInfo';
 
 const Registration = () => {
     const [regInfo, setRegInfo] = useState<RegistrationInfo>(
@@ -43,13 +46,9 @@ const Registration = () => {
                 dispatch(setIsStaff(getRole));
 
                 router.back();
-            } else {
-                setMsg(result.msg);
-                setType('error');
-                setIsOpen(true);
             }
         } else {
-            setMsg('Error');
+            setMsg('Please input Email / Password');
             setType('error');
             setIsOpen(true);
         }

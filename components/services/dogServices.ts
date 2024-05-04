@@ -37,10 +37,10 @@ const dogServices = {
             );
 
             return Promise.resolve({
-                result: result.status <= 400,
+                result: result.status < 400,
                 msg: '',
             });
-        } catch (error) {
+        } catch (error: any) {
             console.log(
                 '🚀 ~ file: dogServices.ts:41 ~ addDogInfo ~ error:',
                 error,
@@ -84,7 +84,7 @@ const dogServices = {
     async deleteDogInfo(id: number): Promise<APIResult> {
         try {
             const result = await axios.delete(ApiEndpoint.dog.deleteDogInfo, {
-                params: id,
+                params: { id },
             });
             console.log(
                 '🚀 ~ file: dogServices.ts:87 ~ deleteDogInfo ~ result:',

@@ -1,13 +1,14 @@
-import type { Metadata } from 'next';
-import { Inter } from 'next/font/google';
-import AppProvider from '../components/provider/AppProvider';
-import HookProvider from '../components/provider/HookProvider';
 import '@fontsource/roboto/300.css';
 import '@fontsource/roboto/400.css';
 import '@fontsource/roboto/500.css';
 import '@fontsource/roboto/700.css';
-import AppSnackBar from '../components/components/common/AppSnackBar/AppSnackBar';
+import type { Metadata } from 'next';
 import { CookiesProvider } from 'next-client-cookies/server';
+import { Inter } from 'next/font/google';
+
+import AppSnackBar from '../components/components/common/AppSnackBar/AppSnackBar';
+import AppProvider from '../components/provider/AppProvider';
+import HookProvider from '../components/provider/HookProvider';
 
 const inter = Inter({ subsets: ['latin'] });
 
@@ -26,9 +27,9 @@ export default function RootLayout({
             <body className={inter.className} style={{ margin: 0 }}>
                 <CookiesProvider>
                     <AppProvider>
-                        <HookProvider>
-                            <AppSnackBar>{children}</AppSnackBar>
-                        </HookProvider>
+                        <AppSnackBar>
+                            <HookProvider>{children}</HookProvider>
+                        </AppSnackBar>
                     </AppProvider>
                 </CookiesProvider>
             </body>

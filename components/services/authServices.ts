@@ -23,7 +23,7 @@ const authServices = {
             if (data === undefined) {
                 return Promise.resolve({
                     result: false,
-                    msg: result.response.data,
+                    msg: '',
                 });
             }
             store.dispatch(setUser(data));
@@ -54,7 +54,7 @@ const authServices = {
             if (data === undefined) {
                 return Promise.resolve({
                     result: false,
-                    msg: result.response.data,
+                    msg: '',
                 });
             }
 

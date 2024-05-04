@@ -1,10 +1,15 @@
+import { useContext } from 'react';
+
 import axios, { AxiosError } from 'axios';
 
+import AppSnackBarContext from '../../components/common/AppSnackBar/context/AppSnackBarContext';
 import ApiSetting from '../../constant/ApiSetting';
 import { closeLoader } from '../../store/reducer/appStateSlice';
 import { useAppDispatch } from '../../store/storeHooks';
 
 const useAxiosInterceptors = () => {
+    const { setIsOpen, setMsg, setType } = useContext(AppSnackBarContext);
+
     const dispatch = useAppDispatch();
 
     axios.create(ApiSetting.axiosSetting);
@@ -18,6 +23,11 @@ const useAxiosInterceptors = () => {
         },
         (error: AxiosError) => {
             dispatch(closeLoader());
+
+            setMsg(error.message);
+            setType('error');
+            setIsOpen(true);
+
             return Promise.resolve(error);
         },
     );
