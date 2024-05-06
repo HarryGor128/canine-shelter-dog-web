@@ -15,7 +15,7 @@ const dogServices = {
                 result,
             );
 
-            return Promise.resolve(result.data);
+            return Promise.resolve(result.data ? result.data : []);
         } catch (error) {
             console.log(
                 '🚀 ~ file: dogServices.ts:16 ~ getAllDogsInfo ~ error:',
@@ -114,7 +114,10 @@ const dogServices = {
                 ApiEndpoint.dog.uploadDogPhoto,
                 file,
             );
-            console.log('🚀 ~ uploadDogPhoto ~ result:', result);
+            console.log(
+                '🚀 ~ file: dogServices.ts:117 ~ uploadDogPhoto ~ result:',
+                result,
+            );
 
             return Promise.resolve(result.data);
         } catch (error) {
@@ -126,6 +129,10 @@ const dogServices = {
     async getDogBreedsList(): Promise<string[]> {
         try {
             const result = await axios.get(ApiEndpoint.dog.getBreedsList);
+            console.log(
+                '🚀 ~ file: dogServices.ts:129 ~ getDogBreedsList ~ result:',
+                result,
+            );
 
             return Promise.resolve(result.data);
         } catch (error) {
@@ -138,6 +145,10 @@ const dogServices = {
             const result = await axios.get(ApiEndpoint.dog.getBreedImg, {
                 params: { breed },
             });
+            console.log(
+                '🚀 ~ file: dogServices.ts:141 ~ getBreedImg ~ result:',
+                result,
+            );
 
             return Promise.resolve(result.data);
         } catch (error) {

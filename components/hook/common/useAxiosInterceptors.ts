@@ -3,6 +3,7 @@ import { useContext } from 'react';
 import axios, { AxiosError } from 'axios';
 
 import AppSnackBarContext from '../../components/common/AppSnackBar/context/AppSnackBarContext';
+import ApiEndpoint from '../../constant/ApiEndpoint';
 import ApiSetting from '../../constant/ApiSetting';
 import { closeLoader } from '../../store/reducer/appStateSlice';
 import { useAppDispatch } from '../../store/storeHooks';
@@ -22,11 +23,17 @@ const useAxiosInterceptors = () => {
             return response;
         },
         (error: AxiosError) => {
+            console.log(
+                '🚀 ~ file: useAxiosInterceptors.ts:25 ~ useAxiosInterceptors ~ error:',
+                error,
+            );
             dispatch(closeLoader());
 
-            setMsg(error.message);
-            setType('error');
-            setIsOpen(true);
+            if (!error.config?.url?.includes(ApiEndpoint.auth.roleQuery)) {
+                setMsg(error.message);
+                setType('error');
+                setIsOpen(true);
+            }
 
             return Promise.resolve(error);
         },
