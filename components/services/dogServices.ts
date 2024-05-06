@@ -136,6 +136,10 @@ const dogServices = {
 
             return Promise.resolve(result.data);
         } catch (error) {
+            console.log(
+                '🚀 ~ file: dogServices.ts:139 ~ getDogBreedsList ~ error:',
+                error,
+            );
             return Promise.resolve([]);
         }
     },
@@ -152,7 +156,31 @@ const dogServices = {
 
             return Promise.resolve(result.data);
         } catch (error) {
+            console.log(
+                '🚀 ~ file: dogServices.ts:156 ~ getBreedImg ~ error:',
+                error,
+            );
             return Promise.resolve('');
+        }
+    },
+
+    async getDogWithList(idList: number[]): Promise<Dog[]> {
+        try {
+            const result = await axios.get(ApiEndpoint.dog.getDogWithList, {
+                params: { id: JSON.stringify(idList) },
+            });
+            console.log(
+                '🚀 ~ file: dogServices.ts:170 ~ getDogWithList ~ result:',
+                result,
+            );
+
+            return Promise.resolve(result.data);
+        } catch (error) {
+            console.log(
+                '🚀 ~ file: dogServices.ts:174 ~ getDogWithList ~ error:',
+                error,
+            );
+            return Promise.resolve([]);
         }
     },
 };
