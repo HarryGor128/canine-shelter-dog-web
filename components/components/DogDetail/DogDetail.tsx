@@ -29,9 +29,13 @@ const DogDetail = ({
     onUploadPhoto,
     isSubmitting,
 }: DogDetailProps) => {
+    const { isStaff } = useAppSelector((state) => state.user);
+    const { dogBreedsList } = useAppSelector((state) => state.dog);
+
     const [breedImg, setBreedImg] = useState<string>('');
 
-    const { dogBreedsList } = useAppSelector((state) => state.dog);
+    const fileInput = useRef<HTMLInputElement>(null);
+
     const dispatch = useAppDispatch();
 
     useEffect(() => {
@@ -48,18 +52,13 @@ const DogDetail = ({
     useEffect(() => {
         const getBreedImg = async () => {
             const result = await dogServices.getBreedImg(dogInfo.breeds);
-
             setBreedImg(result);
         };
 
-        if (dogInfo.breeds && !breedImg.includes(dogInfo.breeds)) {
+        if (isStaff && dogInfo.breeds && !breedImg.includes(dogInfo.breeds)) {
             getBreedImg();
         }
-    }, [dogInfo.breeds]);
-
-    const fileInput = useRef<HTMLInputElement>(null);
-
-    const { isStaff } = useAppSelector((state) => state.user);
+    }, [dogInfo.breeds, isStaff]);
 
     const onUpload = async (event: ChangeEvent<HTMLInputElement>) => {
         const fileList: FileList | null = event.target.files;
@@ -170,14 +169,16 @@ const DogDetail = ({
                         isRequired
                         error={isSubmitting && !dogInfo.breeds}
                     />
-                    <img
-                        src={breedImg}
-                        style={{
-                            margin: '0 20px',
-                            contain: 'content',
-                            height: 100,
-                        }}
-                    />
+                    {isStaff && (
+                        <img
+                            src={breedImg}
+                            style={{
+                                margin: '0 20px',
+                                contain: 'content',
+                                height: 100,
+                            }}
+                        />
+                    )}
                 </div>
                 <TextInput
                     value={dogInfo.description}
