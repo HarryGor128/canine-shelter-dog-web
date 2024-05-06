@@ -1,18 +1,25 @@
+import { ChangeEvent, useEffect, useRef, useState } from 'react';
+
+import { UploadFile as UploadIcon } from '@mui/icons-material';
 import { Stack } from '@mui/material';
 
 import DatePicker from '../common/DatePicker/DatePicker';
+import DropDownList from '../common/DropDownList/DropDownList';
 import TextInput from '../common/TextInput/TextInput';
 
-import { useAppSelector } from '../../store/storeHooks';
+import dogServices from '../../services/dogServices';
+import { setDogBreedsList } from '../../store/reducer/dogSlice';
+import { useAppDispatch, useAppSelector } from '../../store/storeHooks';
 import Dog from '../../type/Dog';
+import UploadFile from '../../type/UploadFile';
+import convertBase64 from '../../utils/base64Converter';
+import dateConverter from '../../utils/date/dateConverter';
 import SexRadioButton from '../SexRadioButton/SexRadioButton';
-import { ChangeEvent } from 'react';
-import { UploadFile } from '@mui/icons-material';
 
 interface DogDetailProps {
     dogInfo: Dog;
     onInput: (value: string | number, key: keyof Dog) => void;
-    onUploadPhoto: (event: ChangeEvent<HTMLInputElement>) => void;
+    onUploadPhoto: (file: UploadFile) => void;
     isSubmitting?: boolean;
 }
 
@@ -22,7 +29,58 @@ const DogDetail = ({
     onUploadPhoto,
     isSubmitting,
 }: DogDetailProps) => {
+    const [breedImg, setBreedImg] = useState<string>('');
+
+    const { dogBreedsList } = useAppSelector((state) => state.dog);
+    const dispatch = useAppDispatch();
+
+    useEffect(() => {
+        const getBreedsList = async () => {
+            const result = await dogServices.getDogBreedsList();
+            dispatch(setDogBreedsList(result));
+        };
+
+        if (dogBreedsList.length <= 0) {
+            getBreedsList();
+        }
+    }, []);
+
+    useEffect(() => {
+        const getBreedImg = async () => {
+            const result = await dogServices.getBreedImg(dogInfo.breeds);
+
+            setBreedImg(result);
+        };
+
+        if (dogInfo.breeds && !breedImg.includes(dogInfo.breeds)) {
+            getBreedImg();
+        }
+    }, [dogInfo.breeds]);
+
+    const fileInput = useRef<HTMLInputElement>(null);
+
     const { isStaff } = useAppSelector((state) => state.user);
+
+    const onUpload = async (event: ChangeEvent<HTMLInputElement>) => {
+        const fileList: FileList | null = event.target.files;
+        if (fileList) {
+            const file = fileList[0];
+            const base64 = await convertBase64(file);
+
+            const fileName = file.name.split('.');
+            const fileType = fileName[fileName.length - 1];
+
+            const result: UploadFile = {
+                base64,
+                fileName: `${dateConverter.nowFileName()}.${fileType}`,
+            };
+            onUploadPhoto(result);
+
+            if (fileInput.current) {
+                fileInput.current.value = '';
+            }
+        }
+    };
 
     return (
         <>
@@ -46,15 +104,18 @@ const DogDetail = ({
                         backgroundColor: '#00000050',
                     }}
                 >
-                    <UploadFile color={'primary'} fontSize={'large'} />
+                    <UploadIcon color={'primary'} fontSize={'large'} />
                 </div>
             )}
-            <input
-                style={{ margin: '20px 0 0 0' }}
-                onChange={onUploadPhoto}
-                type={'file'}
-                accept={'image/*'}
-            />
+            {isStaff && (
+                <input
+                    ref={fileInput}
+                    style={{ margin: '20px 0 0 0' }}
+                    onChange={onUpload}
+                    type={'file'}
+                    accept={'image/*'}
+                />
+            )}
             <Stack
                 direction={{ xs: 'column', sm: 'row' }}
                 spacing={{ xs: 2, sm: 4 }}
@@ -89,17 +150,35 @@ const DogDetail = ({
                     disabled={!isStaff}
                     error={isSubmitting && !dogInfo.sex}
                 />
-                <TextInput
-                    value={dogInfo.breeds}
-                    label={'Dog Breeds'}
-                    placeHolder={'Dog Breeds'}
-                    onInputText={(text) => {
-                        onInput(text, 'breeds');
+                <div
+                    style={{
+                        flexDirection: 'row',
+                        alignItems: 'center',
+                        display: 'flex',
                     }}
-                    isRequired
-                    error={isSubmitting && !dogInfo.breeds}
-                    disabled={!isStaff}
-                />
+                >
+                    <DropDownList
+                        label={'Dog Breed'}
+                        optionList={dogBreedsList.map((item) => {
+                            return { value: item, label: item };
+                        })}
+                        onSelectOption={(value) => {
+                            onInput(value, 'breeds');
+                        }}
+                        defaultValue={dogInfo.breeds}
+                        disabled={!isStaff}
+                        isRequired
+                        error={isSubmitting && !dogInfo.breeds}
+                    />
+                    <img
+                        src={breedImg}
+                        style={{
+                            margin: '0 20px',
+                            contain: 'content',
+                            height: 100,
+                        }}
+                    />
+                </div>
                 <TextInput
                     value={dogInfo.description}
                     label={'Dog Description'}

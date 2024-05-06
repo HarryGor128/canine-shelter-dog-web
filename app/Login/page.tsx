@@ -1,19 +1,20 @@
 'use client';
+
 import { useContext, useState } from 'react';
 
 import { Send } from '@mui/icons-material';
 import { Box, Stack } from '@mui/material';
+import { useCookies } from 'next-client-cookies';
 import { useRouter } from 'next/navigation';
 
 import AppSnackBarContext from '../../components/components/common/AppSnackBar/context/AppSnackBarContext';
 import Button from '../../components/components/common/Button/Button';
 import TextInput from '../../components/components/common/TextInput/TextInput';
+import CookieKey from '../../components/constant/CookieKey';
 import authServices from '../../components/services/authServices';
 import { setIsStaff } from '../../components/store/reducer/userSlice';
 import { useAppDispatch } from '../../components/store/storeHooks';
 import LoginInfo from '../../components/type/LoginInfo';
-import { useCookies } from 'next-client-cookies';
-import CookieKey from '../../components/constant/CookieKey';
 
 const Login = () => {
     const [loginInfo, setLoginInfo] = useState<LoginInfo>(new LoginInfo());
@@ -50,13 +51,9 @@ const Login = () => {
                 cookies.set(CookieKey.UserRole, getRole.toString());
 
                 router.back();
-            } else {
-                setMsg(result.msg);
-                setType('error');
-                setIsOpen(true);
             }
         } else {
-            setMsg('Error');
+            setMsg('Please input Email / Password');
             setType('error');
             setIsOpen(true);
         }

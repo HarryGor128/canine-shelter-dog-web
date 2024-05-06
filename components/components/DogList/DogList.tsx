@@ -6,16 +6,17 @@ import { Close, Delete, Send } from '@mui/icons-material';
 import { Box, Modal, SxProps, Theme } from '@mui/material';
 import { GridColDef, GridRowParams } from '@mui/x-data-grid';
 
+import AppSnackBarContext from '../common/AppSnackBar/context/AppSnackBarContext';
 import AppTable from '../common/AppTable/AppTable';
 import { ButtonProps } from '../common/Button/Button';
 import ButtonGroup from '../common/ButtonGroup/ButtonGroup';
 
+import dogServices from '../../services/dogServices';
 import { useAppSelector } from '../../store/storeHooks';
 import Dog from '../../type/Dog';
+import UploadFile from '../../type/UploadFile';
 import dateConverter from '../../utils/date/dateConverter';
 import DogDetail from '../DogDetail/DogDetail';
-import dogServices from '../../services/dogServices';
-import AppSnackBarContext from '../common/AppSnackBar/context/AppSnackBarContext';
 
 interface DogListProps {
     dogList: Dog[];
@@ -26,6 +27,7 @@ const DogList = ({ dogList, refreshList }: DogListProps) => {
     const [showItemDetail, setShowItemDetail] = useState<boolean>(false);
     const [isSubmitting, setIsSubmitting] = useState<boolean>(false);
     const [selectItem, setSelectItem] = useState<Dog>(new Dog());
+    const [uploadFile, setUploadFile] = useState<UploadFile>(new UploadFile());
 
     const { isStaff } = useAppSelector((state) => state.user);
 
@@ -61,26 +63,42 @@ const DogList = ({ dogList, refreshList }: DogListProps) => {
     };
 
     const onInput = (value: string | number, key: keyof Dog) => {
+        console.log('🚀 ~ file: DogList.tsx:66 ~ onInput ~ value:', value);
         setSelectItem((prev) => {
             return { ...prev, [key]: value };
         });
     };
 
-    const onUploadPhoto = () => {};
+    const onUploadPhoto = (file: UploadFile) => {
+        setSelectItem((prev) => {
+            return { ...prev, photo: file.base64 };
+        });
+        setUploadFile(file);
+    };
 
     const onUpdateDog = async () => {
         setIsSubmitting(true);
-        const result = await dogServices.updateDogInfo(selectItem);
+
+        const uploadPhotoResult = uploadFile
+            ? await dogServices.uploadDogPhoto(uploadFile)
+            : '';
+
+        const result = await dogServices.updateDogInfo(
+            uploadPhotoResult
+                ? {
+                      ...selectItem,
+                      photo: uploadPhotoResult,
+                  }
+                : selectItem,
+        );
 
         if (result.result) {
             setMsg('Update Success');
             setType('success');
+            setIsOpen(true);
+
             onCloseItem();
-        } else {
-            setMsg('Update Fail');
-            setType('error');
         }
-        setIsOpen(true);
 
         if (refreshList) {
             refreshList();

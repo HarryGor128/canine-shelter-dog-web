@@ -1,11 +1,14 @@
 import axios from 'axios';
+
+import APIResult from '../type/APIResult';
 import LoginInfo from '../type/LoginInfo';
 import RegistrationInfo from '../type/RegistrationInfo';
-import ApiEndpoint from '../constant/ApiEndpoint';
+
+import { setIsLogin } from '../store/reducer/appStateSlice';
 import { setUser } from '../store/reducer/userSlice';
 import { store } from '../store/store';
-import { setIsLogin } from '../store/reducer/appStateSlice';
-import APIResult from '../type/APIResult';
+
+import ApiEndpoint from '../constant/ApiEndpoint';
 
 const authServices = {
     async login(loginInfo: LoginInfo): Promise<APIResult> {
@@ -20,7 +23,7 @@ const authServices = {
             if (data === undefined) {
                 return Promise.resolve({
                     result: false,
-                    msg: result.response.data,
+                    msg: '',
                 });
             }
             store.dispatch(setUser(data));
@@ -51,7 +54,7 @@ const authServices = {
             if (data === undefined) {
                 return Promise.resolve({
                     result: false,
-                    msg: result.response.data,
+                    msg: '',
                 });
             }
 

@@ -37,10 +37,10 @@ const dogServices = {
             );
 
             return Promise.resolve({
-                result: result.status <= 400,
+                result: result.status < 400,
                 msg: '',
             });
-        } catch (error) {
+        } catch (error: any) {
             console.log(
                 '🚀 ~ file: dogServices.ts:41 ~ addDogInfo ~ error:',
                 error,
@@ -84,7 +84,7 @@ const dogServices = {
     async deleteDogInfo(id: number): Promise<APIResult> {
         try {
             const result = await axios.delete(ApiEndpoint.dog.deleteDogInfo, {
-                params: id,
+                params: { id },
             });
             console.log(
                 '🚀 ~ file: dogServices.ts:87 ~ deleteDogInfo ~ result:',
@@ -120,6 +120,28 @@ const dogServices = {
         } catch (error) {
             console.log('🚀 ~ uploadDogPhoto ~ error:', error);
             return Promise.resolve(error as string);
+        }
+    },
+
+    async getDogBreedsList(): Promise<string[]> {
+        try {
+            const result = await axios.get(ApiEndpoint.dog.getBreedsList);
+
+            return Promise.resolve(result.data);
+        } catch (error) {
+            return Promise.resolve([]);
+        }
+    },
+
+    async getBreedImg(breed: string): Promise<string> {
+        try {
+            const result = await axios.get(ApiEndpoint.dog.getBreedImg, {
+                params: { breed },
+            });
+
+            return Promise.resolve(result.data);
+        } catch (error) {
+            return Promise.resolve('');
         }
     },
 };

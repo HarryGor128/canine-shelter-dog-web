@@ -1,4 +1,9 @@
 'use client';
+
+import { ReactNode, useEffect, useState } from 'react';
+
+import { Add, Home } from '@mui/icons-material';
+import MenuIcon from '@mui/icons-material/Menu';
 import {
     AppBar,
     Box,
@@ -13,11 +18,9 @@ import {
     Toolbar,
     Typography,
 } from '@mui/material';
-import MenuIcon from '@mui/icons-material/Menu';
-import { useAppSelector } from '../../../store/storeHooks';
-import { ReactNode, useState } from 'react';
 import { useRouter } from 'next/navigation';
-import { Add, Home } from '@mui/icons-material';
+
+import { useAppSelector } from '../../../store/storeHooks';
 
 interface AppHeaderProps {
     title: string;
@@ -32,12 +35,12 @@ interface Navigator {
 const AppHeader = ({ title }: AppHeaderProps) => {
     const router = useRouter();
 
-    const { userInfo } = useAppSelector((state) => state.user);
+    const { userInfo, isStaff } = useAppSelector((state) => state.user);
     const { isLogin } = useAppSelector((state) => state.appState);
 
     const [openDrawer, setOpenDrawer] = useState<boolean>(false);
 
-    const navigator: Navigator[] = [
+    const mainNavigator: Navigator[] = [
         {
             label: 'Home',
             icon: <Home />,
@@ -45,6 +48,9 @@ const AppHeader = ({ title }: AppHeaderProps) => {
                 router.push('/Home');
             },
         },
+    ];
+
+    const staffNavigator: Navigator[] = mainNavigator.concat([
         {
             label: 'Add',
             icon: <Add />,
@@ -52,7 +58,15 @@ const AppHeader = ({ title }: AppHeaderProps) => {
                 router.push('/AddDog');
             },
         },
-    ];
+    ]);
+
+    const [navigator, setNavigator] = useState<Navigator[]>(mainNavigator);
+
+    useEffect(() => {
+        if (isStaff) {
+            setNavigator(staffNavigator);
+        }
+    }, [isStaff]);
 
     const onClickMenu = () => {
         setOpenDrawer(true);
