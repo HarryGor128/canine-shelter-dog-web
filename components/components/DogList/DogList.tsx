@@ -138,10 +138,6 @@ const DogList = ({ dogList, refreshList }: DogListProps) => {
 
         const record: Favorite = { email, id: selectItem.id };
         const idCheck = idList.includes(selectItem.id);
-        console.log(
-            '🚀 ~ file: DogList.tsx:141 ~ onHandleFavorite ~ idCheck:',
-            idCheck,
-        );
         let result = idCheck
             ? await favoritesServices.deleteFavorite(record)
             : await favoritesServices.addFavorite(record);
