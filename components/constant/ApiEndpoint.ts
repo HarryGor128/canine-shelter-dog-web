@@ -20,6 +20,13 @@ const ApiEndpoint = {
         addFavorite: '/favorites/addFavorite',
         deleteFavorite: '/favorites/deleteFavorite',
     },
+    chat: {
+        getChatAllHistory: '/chat/getChatAllHistory',
+        addMessage: '/chat/addMessage',
+        updateMessage: '/chat/updateMessage',
+        deleteMessage: '/chat/deleteMessage',
+        uploadImage: '/chat/uploadImage',
+    },
 };
 
 export default ApiEndpoint;
