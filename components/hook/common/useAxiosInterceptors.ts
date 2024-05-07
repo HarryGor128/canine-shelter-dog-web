@@ -23,13 +23,14 @@ const useAxiosInterceptors = () => {
             return response;
         },
         (error: AxiosError) => {
-            console.log(
-                '🚀 ~ file: useAxiosInterceptors.ts:25 ~ useAxiosInterceptors ~ error:',
-                error,
-            );
             dispatch(closeLoader());
 
-            if (!error.config?.url?.includes(ApiEndpoint.auth.roleQuery)) {
+            if (
+                !error.config?.url?.includes(ApiEndpoint.auth.roleQuery) &&
+                !error.config?.url?.includes(
+                    ApiEndpoint.favorites.getUserFavoritesList,
+                )
+            ) {
                 setMsg(error.message);
                 setType('error');
                 setIsOpen(true);

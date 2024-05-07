@@ -1,8 +1,13 @@
 'use client';
 
-import { CSSProperties, useContext, useState } from 'react';
+import { CSSProperties, useContext, useEffect, useState } from 'react';
 
-import { Close, Delete, Send } from '@mui/icons-material';
+import {
+    Close,
+    Delete,
+    Favorite as FavoriteIcon,
+    Send,
+} from '@mui/icons-material';
 import { Box, Modal, SxProps, Theme } from '@mui/material';
 import { GridColDef, GridRowParams } from '@mui/x-data-grid';
 
@@ -12,8 +17,10 @@ import { ButtonProps } from '../common/Button/Button';
 import ButtonGroup from '../common/ButtonGroup/ButtonGroup';
 
 import dogServices from '../../services/dogServices';
+import favoritesServices from '../../services/favoritesServices';
 import { useAppSelector } from '../../store/storeHooks';
 import Dog from '../../type/Dog';
+import Favorite from '../../type/Favorite';
 import UploadFile from '../../type/UploadFile';
 import dateConverter from '../../utils/date/dateConverter';
 import DogDetail from '../DogDetail/DogDetail';
@@ -28,8 +35,11 @@ const DogList = ({ dogList, refreshList }: DogListProps) => {
     const [isSubmitting, setIsSubmitting] = useState<boolean>(false);
     const [selectItem, setSelectItem] = useState<Dog>(new Dog());
     const [uploadFile, setUploadFile] = useState<UploadFile>(new UploadFile());
+    const [idList, setIdList] = useState<number[]>([]);
+    const [popupButton, setPopupButton] = useState<ButtonProps[]>([]);
 
-    const { isStaff } = useAppSelector((state) => state.user);
+    const { isLogin } = useAppSelector((state) => state.appState);
+    const { isStaff, userInfo } = useAppSelector((state) => state.user);
 
     const { setIsOpen, setMsg, setType } = useContext(AppSnackBarContext);
 
@@ -123,28 +133,79 @@ const DogList = ({ dogList, refreshList }: DogListProps) => {
         }
     };
 
-    let buttonGroup: ButtonProps[] = [
-        {
-            onPress: onCloseItem,
-            text: 'Close',
-            endIcon: <Close />,
-        },
-    ];
+    const onHandleFavorite = async () => {
+        const email = userInfo.user.email;
 
-    if (isStaff) {
-        buttonGroup = buttonGroup.concat([
+        const record: Favorite = { email, id: selectItem.id };
+        const idCheck = idList.includes(selectItem.id);
+        let result = idCheck
+            ? await favoritesServices.deleteFavorite(record)
+            : await favoritesServices.addFavorite(record);
+
+        if (result.result) {
+            setMsg(idCheck ? 'Delete Success' : 'Add Success');
+            setType('success');
+            onCloseItem();
+        } else {
+            setMsg(idCheck ? 'Delete Fail' : 'Add Fail');
+            setType('error');
+        }
+        setIsOpen(true);
+
+        if (refreshList) {
+            refreshList();
+        }
+    };
+
+    const getIdList = async () => {
+        const email = userInfo.user.email;
+        const idList = await favoritesServices.getUserFavoritesList(email);
+        setIdList(idList);
+    };
+
+    useEffect(() => {
+        if (showItemDetail) {
+            getIdList();
+        }
+    }, [showItemDetail]);
+
+    useEffect(() => {
+        let buttonGroup: ButtonProps[] = [
             {
-                onPress: onUpdateDog,
-                text: 'Update',
-                endIcon: <Send />,
+                onPress: onCloseItem,
+                text: 'Close',
+                endIcon: <Close />,
             },
-            {
-                onPress: onDeleteDog,
-                text: 'Delete',
-                endIcon: <Delete />,
-            },
-        ]);
-    }
+        ];
+
+        if (isLogin && isStaff) {
+            buttonGroup = buttonGroup.concat([
+                {
+                    onPress: onUpdateDog,
+                    text: 'Update',
+                    endIcon: <Send />,
+                },
+                {
+                    onPress: onDeleteDog,
+                    text: 'Delete',
+                    endIcon: <Delete />,
+                },
+            ]);
+        }
+
+        if (isLogin && !isStaff) {
+            const idCheck = idList.includes(selectItem.id);
+            buttonGroup = buttonGroup.concat([
+                {
+                    onPress: onHandleFavorite,
+                    text: idCheck ? 'Delete from favorite' : 'Add to favorite',
+                    endIcon: <FavoriteIcon />,
+                },
+            ]);
+        }
+
+        setPopupButton(buttonGroup);
+    }, [isLogin, isStaff, idList]);
 
     return (
         <div style={{ padding: 10 }}>
@@ -162,7 +223,7 @@ const DogList = ({ dogList, refreshList }: DogListProps) => {
                             onUploadPhoto={onUploadPhoto}
                             isSubmitting={isSubmitting}
                         />
-                        <ButtonGroup buttonGroup={buttonGroup} />
+                        <ButtonGroup buttonGroup={popupButton} />
                     </div>
                 </Box>
             </Modal>

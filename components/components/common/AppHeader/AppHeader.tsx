@@ -2,7 +2,7 @@
 
 import { ReactNode, useEffect, useState } from 'react';
 
-import { Add, Home } from '@mui/icons-material';
+import { Add, Favorite, Home } from '@mui/icons-material';
 import MenuIcon from '@mui/icons-material/Menu';
 import {
     AppBar,
@@ -60,11 +60,23 @@ const AppHeader = ({ title }: AppHeaderProps) => {
         },
     ]);
 
+    const publicNavigator: Navigator[] = mainNavigator.concat([
+        {
+            label: 'Favorites',
+            icon: <Favorite />,
+            goToPage: () => {
+                router.push('/Favorites');
+            },
+        },
+    ]);
+
     const [navigator, setNavigator] = useState<Navigator[]>(mainNavigator);
 
     useEffect(() => {
         if (isStaff) {
             setNavigator(staffNavigator);
+        } else {
+            setNavigator(publicNavigator);
         }
     }, [isStaff]);
 
