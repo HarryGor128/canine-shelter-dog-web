@@ -119,11 +119,22 @@ const AppHeader = ({ title }: AppHeaderProps) => {
                         <Typography
                             variant='h6'
                             component='div'
-                            sx={{ flexGrow: 1 }}
+                            sx={{ flex: 1 }}
                         >
                             {title}
                         </Typography>
-                        {`Hi, ${isLogin ? userInfo.user.email : 'Anonymous'}`}
+                        <Typography
+                            component={'div'}
+                            sx={{
+                                flex: 1,
+                                textOverflow: 'ellipsis',
+                                overflow: 'hidden',
+                                whiteSpace: 'nowrap',
+                                textAlign: 'end',
+                            }}
+                        >
+                            {`Hi, ${isLogin ? userInfo.user.email : 'Anonymous'}`}
+                        </Typography>
                         <Button
                             color='inherit'
                             onClick={() => {

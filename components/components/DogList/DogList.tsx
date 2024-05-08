@@ -212,6 +212,7 @@ const DogList = ({ dogList, refreshList }: DogListProps) => {
                 data={dogList}
                 displayField={displayField}
                 onPressItem={onPressItem}
+                height={'85vh'}
             />
             <Modal open={showItemDetail} onClose={onCloseItem}>
                 <Box sx={popupStyle}>

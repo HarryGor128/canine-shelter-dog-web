@@ -154,8 +154,6 @@ const ChatList = ({
     setSelectMsg,
     setCallbackType,
 }: ChatListProps) => {
-    const { height, width } = useWindowSize();
-
     const messagesEndRef = useRef<HTMLDivElement>(null);
 
     const [showOption, setOption] = useState<boolean>(false);
@@ -197,8 +195,7 @@ const ChatList = ({
         <>
             <List
                 sx={{
-                    maxHeight: height * 0.7,
-                    width: width,
+                    height: '74vh',
                     overflow: 'auto',
                 }}
             >
