@@ -24,7 +24,12 @@ export default function RootLayout({
 }>) {
     return (
         <html lang='en'>
-            <body className={inter.className} style={{ margin: 0 }}>
+            <body
+                className={inter.className}
+                style={{
+                    margin: 0,
+                }}
+            >
                 <CookiesProvider>
                     <AppProvider>
                         <AppSnackBar>

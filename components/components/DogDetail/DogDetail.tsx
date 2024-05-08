@@ -5,7 +5,7 @@ import { Stack } from '@mui/material';
 
 import DatePicker from '../common/DatePicker/DatePicker';
 import DropDownList from '../common/DropDownList/DropDownList';
-import TextInput from '../common/TextInput/TextInput';
+import TextFieldInput from '../common/TextFieldInput/TextFieldInput';
 
 import dogServices from '../../services/dogServices';
 import { setDogBreedsList } from '../../store/reducer/dogSlice';
@@ -123,7 +123,7 @@ const DogDetail = ({
                 justifyContent={'center'}
                 margin={'30px 0px 0px 0px'}
             >
-                <TextInput
+                <TextFieldInput
                     value={dogInfo.name}
                     label={'Dog Name'}
                     placeHolder={'Dog Name'}
@@ -180,7 +180,7 @@ const DogDetail = ({
                         />
                     )}
                 </div>
-                <TextInput
+                <TextFieldInput
                     value={dogInfo.description}
                     label={'Dog Description'}
                     placeHolder={'Dog Description'}

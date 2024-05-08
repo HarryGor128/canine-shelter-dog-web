@@ -4,6 +4,8 @@ import APIResult from '../type/APIResult';
 import ChatMessage from '../type/ChatMessage';
 import UploadFile from '../type/UploadFile';
 
+import dateConverter from '../utils/date/dateConverter';
+
 import ApiEndpoint from '../constant/ApiEndpoint';
 
 const chatServices = {
@@ -23,6 +25,9 @@ const chatServices = {
 
     async addMessage(newMsg: ChatMessage): Promise<APIResult> {
         try {
+            newMsg.createTime = dateConverter.nowUnixTime();
+            newMsg.lastUpdate = dateConverter.nowUnixTime();
+
             const result = await axios.post(
                 ApiEndpoint.chat.addMessage,
                 newMsg,
@@ -51,6 +56,8 @@ const chatServices = {
 
     async updateMessage(updateMsg: ChatMessage): Promise<APIResult> {
         try {
+            updateMsg.lastUpdate = dateConverter.nowUnixTime();
+
             const result = await axios.put(
                 ApiEndpoint.chat.updateMessage,
                 updateMsg,

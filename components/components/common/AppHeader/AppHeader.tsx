@@ -101,7 +101,7 @@ const AppHeader = ({ title }: AppHeaderProps) => {
 
     return (
         <>
-            <Box sx={{ flexGrow: 1 }}>
+            <Box>
                 <AppBar position='static'>
                     <Toolbar>
                         {isLogin && (
