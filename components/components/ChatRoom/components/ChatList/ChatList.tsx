@@ -1,6 +1,7 @@
 import {
     CSSProperties,
     Dispatch,
+    RefObject,
     SetStateAction,
     useEffect,
     useRef,
@@ -40,6 +41,7 @@ interface ChatListItemProps {
     item: ChatMessage;
     index: number;
     onPressOption: (chatMsg: ChatMessage) => void;
+    ref?: RefObject<HTMLLIElement>;
 }
 
 interface ChatMsgRendererProps {
@@ -78,7 +80,12 @@ const ChatMsgRenderer = ({ msg, type, myMsg }: ChatMsgRendererProps) => {
     }
 };
 
-const ChatListItem = ({ item, index, onPressOption }: ChatListItemProps) => {
+const ChatListItem = ({
+    item,
+    index,
+    onPressOption,
+    ref,
+}: ChatListItemProps) => {
     const { width } = useWindowSize();
 
     const [showOption, setShowOption] = useState<boolean>(false);
@@ -95,6 +102,7 @@ const ChatListItem = ({ item, index, onPressOption }: ChatListItemProps) => {
             }}
             onMouseEnter={() => setShowOption(true)}
             onMouseLeave={() => setShowOption(false)}
+            ref={ref}
         >
             <div
                 style={{
@@ -154,16 +162,28 @@ const ChatList = ({
     setSelectMsg,
     setCallbackType,
 }: ChatListProps) => {
-    const messagesEndRef = useRef<HTMLDivElement>(null);
+    const listRef = useRef<HTMLLIElement>(null);
 
     const [showOption, setOption] = useState<boolean>(false);
     const [selectItem, setSelectItem] = useState<ChatMessage>(
         new ChatMessage(),
     );
 
+    const scrollToBottom = () => {
+        listRef.current?.scrollIntoView({
+            behavior: 'smooth',
+            block: 'end',
+            inline: 'nearest',
+        });
+    };
+
+    useEffect(() => {
+        scrollToBottom();
+    }, []);
+
     useEffect(() => {
         if (lastMsg.changeType === 'added') {
-            messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
+            scrollToBottom();
         }
     }, [lastMsg]);
 
@@ -204,9 +224,13 @@ const ChatList = ({
                         item={item}
                         index={index}
                         onPressOption={onPressOption}
+                        ref={
+                            chatMsgList.length - 1 === index
+                                ? listRef
+                                : undefined
+                        }
                     />
                 ))}
-                <div ref={messagesEndRef} />
             </List>
             <Modal open={showOption} onClose={onCloseOption}>
                 <Box sx={popupStyle}>
