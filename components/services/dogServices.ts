@@ -65,7 +65,7 @@ const dogServices = {
             );
 
             return Promise.resolve({
-                result: result.status <= 400,
+                result: result.status < 400,
                 msg: '',
             });
         } catch (error) {
@@ -92,7 +92,7 @@ const dogServices = {
             );
 
             return Promise.resolve({
-                result: result.status <= 400,
+                result: result.status < 400,
                 msg: '',
             });
         } catch (error) {

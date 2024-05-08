@@ -19,6 +19,10 @@ const dateConverter = {
         return DateTime.now();
     },
 
+    nowUnixTime() {
+        return DateTime.now().toSeconds();
+    },
+
     dateStringToUnixTime(dateString: string, format: DateFormat) {
         return DateTime.fromFormat(dateString, format).toSeconds();
     },

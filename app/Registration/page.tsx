@@ -8,7 +8,7 @@ import { useRouter } from 'next/navigation';
 
 import AppSnackBarContext from '../../components/components/common/AppSnackBar/context/AppSnackBarContext';
 import Button from '../../components/components/common/Button/Button';
-import TextInput from '../../components/components/common/TextInput/TextInput';
+import TextFieldInput from '../../components/components/common/TextFieldInput/TextFieldInput';
 import authServices from '../../components/services/authServices';
 import { setIsStaff } from '../../components/store/reducer/userSlice';
 import { useAppDispatch } from '../../components/store/storeHooks';
@@ -67,7 +67,7 @@ const Registration = () => {
         >
             <Stack direction={'column'} spacing={2}>
                 <div style={{ alignSelf: 'center' }}>Registration</div>
-                <TextInput
+                <TextFieldInput
                     label={'Email'}
                     placeHolder={'Email'}
                     onInputText={(text) => {
@@ -76,7 +76,7 @@ const Registration = () => {
                     isRequired
                     error={isSubmitting && !regInfo.email}
                 />
-                <TextInput
+                <TextFieldInput
                     label={'Password'}
                     placeHolder={'Password'}
                     onInputText={(text) => {
@@ -86,7 +86,7 @@ const Registration = () => {
                     isSecret
                     error={isSubmitting && !regInfo.password}
                 />
-                <TextInput
+                <TextFieldInput
                     label={'Sign Up Code'}
                     placeHolder={'Sign Up Code'}
                     onInputText={(text) => {

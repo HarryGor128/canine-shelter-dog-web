@@ -16,9 +16,16 @@ const ApiEndpoint = {
         roleQuery: 'auth/roleQuery',
     },
     favorites: {
-        getUserFavoritesList: '/favorites/getUserFavoritesList',
-        addFavorite: '/favorites/addFavorite',
-        deleteFavorite: '/favorites/deleteFavorite',
+        getUserFavoritesList: 'favorites/getUserFavoritesList',
+        addFavorite: 'favorites/addFavorite',
+        deleteFavorite: 'favorites/deleteFavorite',
+    },
+    chat: {
+        getChatAllHistory: 'chat/getChatAllHistory',
+        addMessage: 'chat/addMessage',
+        updateMessage: 'chat/updateMessage',
+        deleteMessage: 'chat/deleteMessage',
+        uploadImage: 'chat/uploadImage',
     },
 };
 

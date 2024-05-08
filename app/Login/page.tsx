@@ -9,7 +9,7 @@ import { useRouter } from 'next/navigation';
 
 import AppSnackBarContext from '../../components/components/common/AppSnackBar/context/AppSnackBarContext';
 import Button from '../../components/components/common/Button/Button';
-import TextInput from '../../components/components/common/TextInput/TextInput';
+import TextFieldInput from '../../components/components/common/TextFieldInput/TextFieldInput';
 import CookieKey from '../../components/constant/CookieKey';
 import authServices from '../../components/services/authServices';
 import { setIsStaff } from '../../components/store/reducer/userSlice';
@@ -72,7 +72,7 @@ const Login = () => {
         >
             <Stack direction={'column'} spacing={2}>
                 <div style={{ alignSelf: 'center' }}>Login</div>
-                <TextInput
+                <TextFieldInput
                     label={'Email'}
                     placeHolder={'Email'}
                     onInputText={(text) => {
@@ -81,7 +81,7 @@ const Login = () => {
                     isRequired
                     error={isSubmitting && !loginInfo.email}
                 />
-                <TextInput
+                <TextFieldInput
                     label={'Password'}
                     placeHolder={'Password'}
                     onInputText={(text) => {

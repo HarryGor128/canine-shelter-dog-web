@@ -2,7 +2,7 @@
 
 import { ReactNode, useEffect, useState } from 'react';
 
-import { Add, Favorite, Home } from '@mui/icons-material';
+import { Add, Chat, Favorite, Home } from '@mui/icons-material';
 import MenuIcon from '@mui/icons-material/Menu';
 import {
     AppBar,
@@ -46,6 +46,13 @@ const AppHeader = ({ title }: AppHeaderProps) => {
             icon: <Home />,
             goToPage: () => {
                 router.push('/Home');
+            },
+        },
+        {
+            label: 'Chat Room',
+            icon: <Chat />,
+            goToPage: () => {
+                router.push('/Chat');
             },
         },
     ];
@@ -94,7 +101,7 @@ const AppHeader = ({ title }: AppHeaderProps) => {
 
     return (
         <>
-            <Box sx={{ flexGrow: 1 }}>
+            <Box>
                 <AppBar position='static'>
                     <Toolbar>
                         {isLogin && (

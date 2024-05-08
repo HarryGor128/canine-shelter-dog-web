@@ -1,7 +1,8 @@
-import { TextField, TextFieldProps } from '@mui/material';
-import { ChangeEvent, CSSProperties } from 'react';
+import { CSSProperties, ChangeEvent } from 'react';
 
-type TextInputProps = {
+import { TextField, TextFieldProps } from '@mui/material';
+
+type TextFieldInputProps = {
     label: string;
     onInputText: (text: string) => void;
     isRequired?: boolean;
@@ -11,7 +12,7 @@ type TextInputProps = {
     isSecret?: boolean;
 } & TextFieldProps;
 
-const TextInput = ({
+const TextFieldInput = ({
     label,
     onInputText,
     isRequired,
@@ -20,7 +21,7 @@ const TextInput = ({
     error,
     isSecret,
     ...props
-}: TextInputProps) => {
+}: TextFieldInputProps) => {
     const input = (
         change: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>,
     ) => {
@@ -41,4 +42,4 @@ const TextInput = ({
     );
 };
 
-export default TextInput;
+export default TextFieldInput;
