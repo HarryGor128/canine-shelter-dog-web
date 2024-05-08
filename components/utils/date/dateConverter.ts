@@ -20,11 +20,11 @@ const dateConverter = {
     },
 
     nowUnixTime() {
-        return DateTime.now().toSeconds();
+        return Math.round(DateTime.now().toSeconds());
     },
 
     dateStringToUnixTime(dateString: string, format: DateFormat) {
-        return DateTime.fromFormat(dateString, format).toSeconds();
+        return Math.round(DateTime.fromFormat(dateString, format).toSeconds());
     },
 
     unixTimeToDateString(
@@ -66,7 +66,7 @@ const dateConverter = {
     },
 
     dateObjToUnixTime(date: DateTime<true>) {
-        return date.toSeconds();
+        return Math.round(date.toSeconds());
     },
 
     dateObjToDateString(

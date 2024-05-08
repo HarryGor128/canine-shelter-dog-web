@@ -42,8 +42,41 @@ interface ChatListItemProps {
     onPressOption: (chatMsg: ChatMessage) => void;
 }
 
+interface ChatMsgRendererProps {
+    msg: string;
+    type: 'text' | 'img';
+    myMsg: boolean;
+}
+
 const myMsgColor = '#428bff';
 const otherMsgColor = '#e6e6e6';
+
+const ChatMsgRenderer = ({ msg, type, myMsg }: ChatMsgRendererProps) => {
+    switch (type) {
+        case 'text':
+            return (
+                <ListItemText
+                    style={{
+                        color: myMsg ? 'white' : 'black',
+                    }}
+                    primary={msg}
+                />
+            );
+        case 'img':
+            return (
+                <img
+                    src={msg}
+                    style={{
+                        width: '100%',
+                        maxHeight: 300,
+                        contain: 'content',
+                    }}
+                />
+            );
+        default:
+            return <></>;
+    }
+};
 
 const ChatListItem = ({ item, index, onPressOption }: ChatListItemProps) => {
     const { width } = useWindowSize();
@@ -86,11 +119,10 @@ const ChatListItem = ({ item, index, onPressOption }: ChatListItemProps) => {
                         wordWrap: 'break-word',
                     }}
                 >
-                    <ListItemText
-                        style={{
-                            color: myMsg ? 'white' : 'black',
-                        }}
-                        primary={item.msg}
+                    <ChatMsgRenderer
+                        msg={item.msg}
+                        type={item.type}
+                        myMsg={myMsg}
                     />
                 </div>
                 <ListItemText
@@ -98,10 +130,10 @@ const ChatListItem = ({ item, index, onPressOption }: ChatListItemProps) => {
                         color: 'gray',
                         justifySelf: myMsg ? 'flex-end' : 'flex-start',
                     }}
-                    primary={dateConverter.unixTimeToDateString(
-                        item.lastUpdate,
+                    primary={`${dateConverter.unixTimeToDateString(
+                        item.createTime,
                         DateFormat.YYYYMMddHHmm,
-                    )}
+                    )}${item.createTime < item.lastUpdate ? ' Edited' : ''}`}
                 />
             </div>
             {((myMsg && showOption) || (isStaff && showOption)) && (
@@ -122,8 +154,6 @@ const ChatList = ({
     setSelectMsg,
     setCallbackType,
 }: ChatListProps) => {
-    const { height, width } = useWindowSize();
-
     const messagesEndRef = useRef<HTMLDivElement>(null);
 
     const [showOption, setOption] = useState<boolean>(false);
@@ -150,10 +180,10 @@ const ChatList = ({
     };
 
     const onPressUpdate = () => {
-        setOption(false);
-        setCallbackType('update');
-        setSelectMsg(selectItem);
         setSelectItem(new ChatMessage());
+        setSelectMsg(selectItem);
+        setCallbackType('update');
+        setOption(false);
     };
 
     const onPressDelete = async () => {
@@ -165,8 +195,7 @@ const ChatList = ({
         <>
             <List
                 sx={{
-                    maxHeight: height * 0.7,
-                    width: width,
+                    height: '74vh',
                     overflow: 'auto',
                 }}
             >
@@ -183,18 +212,28 @@ const ChatList = ({
                 <Box sx={popupStyle}>
                     <div style={popupBox}>
                         <ButtonGroup
-                            buttonGroup={[
-                                {
-                                    text: 'Update',
-                                    onPress: onPressUpdate,
-                                    endIcon: <Update />,
-                                },
-                                {
-                                    text: 'Delete',
-                                    onPress: onPressDelete,
-                                    endIcon: <Delete />,
-                                },
-                            ]}
+                            buttonGroup={
+                                selectItem.type === 'text'
+                                    ? [
+                                          {
+                                              text: 'Update',
+                                              onPress: onPressUpdate,
+                                              endIcon: <Update />,
+                                          },
+                                          {
+                                              text: 'Delete',
+                                              onPress: onPressDelete,
+                                              endIcon: <Delete />,
+                                          },
+                                      ]
+                                    : [
+                                          {
+                                              text: 'Delete',
+                                              onPress: onPressDelete,
+                                              endIcon: <Delete />,
+                                          },
+                                      ]
+                            }
                             margin={'0'}
                         />
                     </div>

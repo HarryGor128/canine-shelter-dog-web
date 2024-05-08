@@ -73,7 +73,6 @@ const DogList = ({ dogList, refreshList }: DogListProps) => {
     };
 
     const onInput = (value: string | number, key: keyof Dog) => {
-        console.log('🚀 ~ file: DogList.tsx:66 ~ onInput ~ value:', value);
         setSelectItem((prev) => {
             return { ...prev, [key]: value };
         });
@@ -89,7 +88,7 @@ const DogList = ({ dogList, refreshList }: DogListProps) => {
     const onUpdateDog = async () => {
         setIsSubmitting(true);
 
-        const uploadPhotoResult = uploadFile
+        const uploadPhotoResult = uploadFile.fileName
             ? await dogServices.uploadDogPhoto(uploadFile)
             : '';
 
@@ -205,7 +204,7 @@ const DogList = ({ dogList, refreshList }: DogListProps) => {
         }
 
         setPopupButton(buttonGroup);
-    }, [isLogin, isStaff, idList]);
+    }, [isLogin, isStaff, idList, uploadFile, selectItem]);
 
     return (
         <div style={{ padding: 10 }}>
@@ -213,6 +212,7 @@ const DogList = ({ dogList, refreshList }: DogListProps) => {
                 data={dogList}
                 displayField={displayField}
                 onPressItem={onPressItem}
+                height={'85vh'}
             />
             <Modal open={showItemDetail} onClose={onCloseItem}>
                 <Box sx={popupStyle}>

@@ -4,9 +4,15 @@ export interface AppTableProps {
     data: any[];
     displayField: GridColDef[];
     onPressItem?: GridEventListener<'rowClick'>;
+    height?: number | string;
 }
 
-const AppTable = ({ data, displayField, onPressItem }: AppTableProps) => {
+const AppTable = ({
+    data,
+    displayField,
+    onPressItem,
+    height,
+}: AppTableProps) => {
     return (
         <DataGrid
             rows={data}
@@ -19,7 +25,7 @@ const AppTable = ({ data, displayField, onPressItem }: AppTableProps) => {
             pageSizeOptions={[30, 50, 100]}
             onRowClick={onPressItem}
             disableMultipleRowSelection
-            style={{ minHeight: 200 }}
+            style={{ height }}
         />
     );
 };
