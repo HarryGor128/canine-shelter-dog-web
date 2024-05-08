@@ -1,13 +1,21 @@
-import { Dispatch, SetStateAction, useEffect, useState } from 'react';
+import {
+    ChangeEvent,
+    Dispatch,
+    SetStateAction,
+    useEffect,
+    useRef,
+    useState,
+} from 'react';
 
-import { Send } from '@mui/icons-material';
-import { Input } from '@mui/material';
+import { Image, Send } from '@mui/icons-material';
+import { IconButton, Input } from '@mui/material';
 
 import chatServices from '../../../../services/chatServices';
 import { useAppSelector } from '../../../../store/storeHooks';
 import APIResult from '../../../../type/APIResult';
 import ChatMessage from '../../../../type/ChatMessage';
-import Button from '../../../common/Button/Button';
+import UploadFile from '../../../../type/UploadFile';
+import convertBase64 from '../../../../utils/base64Converter';
 import CallbackType from '../../CallbackType';
 
 interface SendMsgBoxProps {
@@ -21,6 +29,8 @@ const SendMsgBox = ({
     callbackType,
     setCallbackType,
 }: SendMsgBoxProps) => {
+    const uploadRef = useRef<HTMLInputElement>(null);
+
     const { userInfo } = useAppSelector((state) => state.user);
 
     const [sendMsg, setSendMsg] = useState<ChatMessage>(new ChatMessage());
@@ -68,6 +78,33 @@ const SendMsgBox = ({
         }
     };
 
+    const onUpload = async (event: ChangeEvent<HTMLInputElement>) => {
+        const file =
+            event &&
+            event.target &&
+            event.target.files &&
+            event.target.files[0];
+
+        if (file) {
+            const uploadFile: UploadFile = {
+                fileName: file.name,
+                base64: await convertBase64(file),
+            };
+
+            const imgUrl = await chatServices.uploadImage(uploadFile);
+
+            await chatServices.addMessage({
+                ...sendMsg,
+                msg: imgUrl,
+                type: 'img',
+            });
+        }
+    };
+
+    const onPressUploadIcon = () => {
+        uploadRef.current?.click();
+    };
+
     return (
         <div style={{ padding: 10 }}>
             <div
@@ -85,17 +122,30 @@ const SendMsgBox = ({
                     placeholder={'Message'}
                     value={sendMsg.msg}
                     onChange={(event) => onInput(event.target.value)}
-                    style={{ flex: 1, display: 'flex', margin: '0 10px 0 0' }}
+                    style={{ flex: 1, display: 'flex' }}
                 />
-                <Button
-                    onPress={() => {
-                        onPressSend();
-                    }}
-                    text={'Send'}
-                    endIcon={<Send />}
+                <IconButton
+                    color='primary'
+                    component='span'
+                    onClick={onPressUploadIcon}
+                >
+                    <Image />
+                </IconButton>
+                <IconButton
+                    color='primary'
+                    onClick={onPressSend}
                     disabled={!sendMsg.msg}
-                />
+                >
+                    <Send />
+                </IconButton>
             </div>
+            <input
+                ref={uploadRef}
+                accept='image/*'
+                type='file'
+                style={{ display: 'none' }}
+                onChange={onUpload}
+            />
         </div>
     );
 };
