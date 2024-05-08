@@ -1,7 +1,7 @@
 import { ChangeEvent, useEffect, useRef, useState } from 'react';
 
 import { UploadFile as UploadIcon } from '@mui/icons-material';
-import { Stack } from '@mui/material';
+import { IconButton, Stack } from '@mui/material';
 
 import DatePicker from '../common/DatePicker/DatePicker';
 import DropDownList from '../common/DropDownList/DropDownList';
@@ -34,7 +34,7 @@ const DogDetail = ({
 
     const [breedImg, setBreedImg] = useState<string>('');
 
-    const fileInput = useRef<HTMLInputElement>(null);
+    const uploadRef = useRef<HTMLInputElement>(null);
 
     const dispatch = useAppDispatch();
 
@@ -61,9 +61,13 @@ const DogDetail = ({
     }, [dogInfo.breeds, isStaff]);
 
     const onUpload = async (event: ChangeEvent<HTMLInputElement>) => {
-        const fileList: FileList | null = event.target.files;
-        if (fileList) {
-            const file = fileList[0];
+        const file =
+            event &&
+            event.target &&
+            event.target.files &&
+            event.target.files[0];
+
+        if (file) {
             const base64 = await convertBase64(file);
 
             const fileName = file.name.split('.');
@@ -74,11 +78,11 @@ const DogDetail = ({
                 fileName: `${dateConverter.nowFileName()}.${fileType}`,
             };
             onUploadPhoto(result);
-
-            if (fileInput.current) {
-                fileInput.current.value = '';
-            }
         }
+    };
+
+    const onPressUpload = () => {
+        uploadRef.current?.click();
     };
 
     return (
@@ -90,31 +94,20 @@ const DogDetail = ({
                         height: 200,
                         contain: 'content',
                     }}
+                    onClick={onPressUpload}
                 />
             ) : (
-                <div
-                    style={{
-                        height: 80,
-                        width: 80,
-                        borderRadius: 1000,
-                        justifyContent: 'center',
-                        alignItems: 'center',
-                        display: 'flex',
-                        backgroundColor: '#00000050',
-                    }}
-                >
-                    <UploadIcon color={'primary'} fontSize={'large'} />
-                </div>
+                <IconButton color={'primary'} onClick={onPressUpload}>
+                    <UploadIcon fontSize={'large'} />
+                </IconButton>
             )}
-            {isStaff && (
-                <input
-                    ref={fileInput}
-                    style={{ margin: '20px 0 0 0' }}
-                    onChange={onUpload}
-                    type={'file'}
-                    accept={'image/*'}
-                />
-            )}
+            <input
+                ref={uploadRef}
+                style={{ display: 'none' }}
+                onChange={onUpload}
+                type={'file'}
+                accept={'image/*'}
+            />
             <Stack
                 direction={{ xs: 'column', sm: 'row' }}
                 spacing={{ xs: 2, sm: 4 }}

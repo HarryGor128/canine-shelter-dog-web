@@ -16,6 +16,7 @@ import APIResult from '../../../../type/APIResult';
 import ChatMessage from '../../../../type/ChatMessage';
 import UploadFile from '../../../../type/UploadFile';
 import convertBase64 from '../../../../utils/base64Converter';
+import dateConverter from '../../../../utils/date/dateConverter';
 import CallbackType from '../../CallbackType';
 
 interface SendMsgBoxProps {
@@ -86,8 +87,11 @@ const SendMsgBox = ({
             event.target.files[0];
 
         if (file) {
+            const fileName = file.name.split('.');
+            const fileType = fileName[fileName.length - 1];
+
             const uploadFile: UploadFile = {
-                fileName: file.name,
+                fileName: `${dateConverter.nowFileName()}.${fileType}`,
                 base64: await convertBase64(file),
             };
 
