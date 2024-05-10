@@ -7,8 +7,8 @@ import {
     useState,
 } from 'react';
 
-import { Image, Send } from '@mui/icons-material';
-import { IconButton, Input } from '@mui/material';
+import { Close, Image, Send } from '@mui/icons-material';
+import { IconButton, Input, Typography } from '@mui/material';
 
 import chatServices from '../../../../services/chatServices';
 import { useAppSelector } from '../../../../store/storeHooks';
@@ -16,6 +16,7 @@ import APIResult from '../../../../type/APIResult';
 import ChatMessage from '../../../../type/ChatMessage';
 import UploadFile from '../../../../type/UploadFile';
 import convertBase64 from '../../../../utils/base64Converter';
+import DateFormat from '../../../../utils/date/DateFormat';
 import dateConverter from '../../../../utils/date/dateConverter';
 import CallbackType from '../../CallbackType';
 
@@ -59,6 +60,11 @@ const SendMsgBox = ({
         });
     };
 
+    const onPressCloseUpdateMsg = () => {
+        createNewMsg();
+        setCallbackType('add');
+    };
+
     const onPressSend = async () => {
         let result: APIResult = { result: false, msg: '' };
 
@@ -74,8 +80,7 @@ const SendMsgBox = ({
         }
 
         if (result.result) {
-            createNewMsg();
-            setCallbackType('add');
+            onPressCloseUpdateMsg();
         }
     };
 
@@ -118,30 +123,52 @@ const SendMsgBox = ({
                     padding: 10,
                     backgroundColor: '#e6e6e6',
                     borderRadius: 10,
-                    alignItems: 'center',
-                    justifyContent: 'space-between',
+                    flexDirection: 'column',
                 }}
             >
-                <Input
-                    placeholder={'Message'}
-                    value={sendMsg.msg}
-                    onChange={(event) => onInput(event.target.value)}
-                    style={{ flex: 1, display: 'flex' }}
-                />
-                <IconButton
-                    color='primary'
-                    component='span'
-                    onClick={onPressUploadIcon}
+                {callbackType === 'update' && selectMsg && (
+                    <div
+                        style={{
+                            display: 'flex',
+                            flexDirection: 'row',
+                            alignItems: 'center',
+                        }}
+                    >
+                        <Typography>{`Editing message sent in ${dateConverter.unixTimeToDateString(selectMsg.createTime, DateFormat.YYYYMMddHHmm)}`}</Typography>
+                        <IconButton onClick={onPressCloseUpdateMsg}>
+                            <Close />
+                        </IconButton>
+                    </div>
+                )}
+                <div
+                    style={{
+                        flex: 1,
+                        display: 'flex',
+                        alignItems: 'center',
+                        justifyContent: 'space-between',
+                    }}
                 >
-                    <Image />
-                </IconButton>
-                <IconButton
-                    color='primary'
-                    onClick={onPressSend}
-                    disabled={!sendMsg.msg}
-                >
-                    <Send />
-                </IconButton>
+                    <Input
+                        placeholder={'Message'}
+                        value={sendMsg.msg}
+                        onChange={(event) => onInput(event.target.value)}
+                        style={{ flex: 1, display: 'flex' }}
+                    />
+                    <IconButton
+                        color='primary'
+                        component='span'
+                        onClick={onPressUploadIcon}
+                    >
+                        <Image />
+                    </IconButton>
+                    <IconButton
+                        color='primary'
+                        onClick={onPressSend}
+                        disabled={!sendMsg.msg}
+                    >
+                        <Send />
+                    </IconButton>
+                </div>
             </div>
             <input
                 ref={uploadRef}
