@@ -20,6 +20,7 @@ const ChatRoom = () => {
             <ChatList
                 chatMsgList={chatMsgList}
                 lastMsg={chatMessage}
+                callbackType={callbackType}
                 setSelectMsg={setSelectMsg}
                 setCallbackType={setCallbackType}
             />

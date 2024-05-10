@@ -33,6 +33,7 @@ import CallbackType from '../../CallbackType';
 interface ChatListProps {
     chatMsgList: ChatMessage[];
     lastMsg: WebSocketMsg; // For scroll
+    callbackType: CallbackType;
     setSelectMsg: Dispatch<SetStateAction<ChatMessage>>;
     setCallbackType: Dispatch<SetStateAction<CallbackType>>;
 }
@@ -159,6 +160,7 @@ const ChatListItem = ({
 const ChatList = ({
     chatMsgList,
     lastMsg,
+    callbackType,
     setSelectMsg,
     setCallbackType,
 }: ChatListProps) => {
@@ -214,8 +216,8 @@ const ChatList = ({
     return (
         <>
             <List
-                sx={{
-                    height: '74vh',
+                style={{
+                    height: callbackType === 'add' ? '74vh' : '69vh',
                     overflow: 'auto',
                 }}
             >
